@@ -1,0 +1,152 @@
+﻿@inject IUnitOfWork _uow
+
+@{
+
+    AdminSetting adminSetting = _uow.Admin.GetAdminPanelSetting();
+    string adminSettingClass = "";
+    string adminWrapperSettingClass = "";
+    if (adminSetting != null)
+    {
+        if (adminSetting.colorLessSidebar)
+        {
+            adminSettingClass = adminSettingClass + "ColorLessIcons ";
+        }
+        if (adminSetting.darkMode == true)
+        {
+            adminSettingClass = adminSettingClass + "dark-theme ";
+        }
+        if (adminSetting.darkSidebar == true)
+        {
+            adminSettingClass = adminSettingClass + "dark-sidebar ";
+        }
+        if (adminSetting.WrapperToggled == true)
+        {
+            adminWrapperSettingClass = "toggled";
+        }
+    }
+
+}
+<!DOCTYPE html>
+<html class="@adminSettingClass" lang="en">
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <title>@ViewData["Title"] - Yönetim Paneli</title>
+    <!--favicon-->
+    <link rel="icon" href="~/theme/assets/images/favicon-32x32.png" type="image/png" />
+    <!-- Vector CSS -->
+    <link href="~/theme/assets/plugins/vectormap/jquery-jvectormap-2.0.2.css" rel="stylesheet" />
+    <!--plugins-->
+    <link href="~/theme/assets/plugins/simplebar/css/simplebar.css" rel="stylesheet" />
+    <link href="~/theme/assets/plugins/perfect-scrollbar/css/perfect-scrollbar.css" rel="stylesheet" />
+    <link href="~/theme/assets/plugins/metismenu/css/metisMenu.min.css" rel="stylesheet" />
+
+    <link rel="stylesheet" href="~/theme/assets/css/bootstrap.min.css" />
+    <!-- Icons CSS -->
+    <link rel="stylesheet" href="~/theme/assets/css/icons.css" />
+    <!-- Font awesome CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css" />
+    <!-- App CSS -->
+    <link rel="stylesheet" href="~/theme/assets/css/app.css" />
+    <link rel="stylesheet" href="~/theme/assets/css/dark-sidebar.css" />
+    <link rel="stylesheet" href="~/theme/assets/css/dark-theme.css" />
+    <link href="~/lib/bootstrap-slider/css/bootstrap-slider.min.css" rel="stylesheet" />
+    <!--OFC MEDIA STYLES-->
+    <link href="~/lib/ofc-media/ofc-media.css" rel="stylesheet" />
+    <link href="https://harvesthq.github.io/chosen/chosen.css" rel="stylesheet" />
+    <link href="~/lib/summernote/summernote-lite.min.css" rel="stylesheet" />
+    <link href="~/summernote/summernote.min.css" rel="stylesheet" />
+    <link href="~/summernote/summernote-lite.min.css" rel="stylesheet" />
+
+    <link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.css" rel="stylesheet">
+    @await RenderSectionAsync("libStyle", required: false)
+    <link rel="stylesheet" href="~/css/site.css" />
+    @await RenderSectionAsync("style", required: false)
+
+</head>
+
+<body>
+    <!-- wrapper -->
+    <div class="wrapper @adminWrapperSettingClass">
+        <!--sidebar-wrapper-->
+        <div class="sidebar-wrapper" data-simplebar="true">
+            @await Component.InvokeAsync("Sidebar", new { viewName = "Top" })
+            @await Component.InvokeAsync("Sidebar", new { viewName = "Left" })
+        </div>
+        <!--end sidebar-wrapper-->
+        <!--header-->
+        @await Component.InvokeAsync("Header", new { viewName = "Top" })
+        <!--end header-->
+        <!--page-wrapper-->
+        <div class="page-wrapper">
+            <!--page-content-wrapper-->
+            <div class="page-content-wrapper">
+                <div class="page-content">
+                    @RenderBody()
+                </div>
+            </div>
+            <!--end page-content-wrapper-->
+        </div>
+        <!--end page-wrapper-->
+        <!--start overlay-->
+        <div class="overlay toggle-btn-mobile"></div>
+        <!--end overlay-->
+        <!--Start Back To Top Button--> <a href="javaScript:;" class="back-to-top"><i class='bx bxs-up-arrow-alt'></i></a>
+        <!--End Back To Top Button-->
+        <div class="footer ">
+            <p class="mb-0">
+                @DateTime.Now.Year | by <a href="https://webbilir.com" target="_blank">Webbilir</a>
+                <img class="mr-2" src="~/img/default/webbilir_248x248.png" width="25" height="25" />
+            </p>
+        </div>
+    </div>
+    <!-- end wrapper -->
+    <!--start switcher-->
+    @await Component.InvokeAsync("Sidebar", new { viewName = "Switcher" })
+    <!--end switcher-->
+    <!-- JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="~/theme/assets/js/jquery.min.js"></script>
+    <script src="~/theme/assets/js/bootstrap.min.js"></script>
+    <!--plugins-->
+    <script src="~/theme/assets/plugins/simplebar/js/simplebar.min.js"></script>
+    <script src="~/theme/assets/plugins/metismenu/js/metisMenu.min.js"></script>
+    <script src="~/theme/assets/plugins/perfect-scrollbar/js/perfect-scrollbar.js"></script>
+    <!--Sweet Alert-->
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+    <!--OFC MEDIA-->
+    <script src="~/lib/bootstrap-slider/bootstrap-slider.min.js"></script>
+    <script asp-append-version="true" src="~/lib/ofc-media/ofc-media.js"></script>
+    @await RenderSectionAsync("libScript", required: false)
+    <!-- App JS -->
+    <script src="~/theme/assets/js/app.js"></script>
+    <!-- end wrapper -->
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    <script src="~/summernote/summernote.min.js"></script>
+    <script src="~/summernote/summernote-lite.min.js"></script>
+    @await RenderSectionAsync("script", required: false)
+
+    <script src="https://harvesthq.github.io/chosen/chosen.jquery.js"></script>
+    <script src="~/js/chosen.jquery.min.js"></script>
+    <script src="~/js/chosen.jquery.js"></script>
+
+    <script>
+
+        $(".chosen-select").chosen({ no_results_text: "Eşleşen sonuç bulunamadı!" });
+
+        $(".chosen-select").on('change', function (event, el) {
+            var selected_element = $(".chosen-select option:contains(" + el.selected + ")");
+            var selected_value = selected_element.val();
+            var parent_optgroup = selected_element.closest('optgroup').attr('label');
+            var parent_optgroup_class = selected_element.closest('optgroup').attr('class');
+            $(".search-choice:last > span").css("background-color", parent_optgroup_class);
+            selected_element.text(parent_optgroup + ' - ' + selected_value);
+
+            $(selected_element).addClass(`${parent_optgroup_class}`);
+        });
+
+    </script>
+</body>
+
+</html>

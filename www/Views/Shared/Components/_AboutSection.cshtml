@@ -1,0 +1,20 @@
+﻿@model SectionViewModel
+@inject IUnitOfWork _uow
+@{
+    Media media1 = _uow.Media.GetMedia(Model.paramMediaId1);
+
+}
+<link href="~/css/aboutpage.css" rel="stylesheet" />
+<section class="container pt-100 pb-100 about-page-container">
+    <div class="row">
+        <div class="col-12 px-5">
+            <h3>@Model.paramText2</h3>
+        </div>
+        <div class="col-12 col-lg-6 px-5 mb-5 mb-lg-0">
+            <p>@Model.paramText1</p>
+        </div>
+        <div class="col-12 col-lg-6 px-5">
+            <img src="@media1.Path" class="w-100 object-fit-cover" />
+        </div>
+    </div>
+</section>

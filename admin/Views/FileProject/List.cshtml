@@ -1,0 +1,85 @@
+﻿@model PaginatedList<FileProject>
+@inject IUnitOfWork _uow
+
+@{
+    ViewData["Title"] = "Dosya Projeleri Listesi";
+}
+
+@await Component.InvokeAsync("Breadcrumb", new BreadcrumbViewModel { Title = "Dosya Proje Listesi" })
+
+<div class="card">
+    <div class="card-body">
+        <div class="card-title">
+            <h4 class="mb-0">Dosya Projeleri</h4>
+        </div>
+        <hr />
+        <div class="alert alert-info">
+            Dosya projeleri websitelerine göre dosyaların ekleneceği klasörlerin konumunu belirlemeye yarar. Dosya projeleri alt alan adlarındaki projelerle kullanılabileceği
+            gibi projedeki wwwroot içinde oluşturduğunuz bir <b>uploads</b> klasörüyle de kullanılabilir. Projede <b>media tablosuna</b> ekleme yapılırken
+            işlemin yapıldığı websitesindeki <b>proje adı ve dosya yükleme klasörü</b> ilgili veriden alınır ve o klasöre dosya yüklenir. Bunun için her websitesinin bir <b>fileproject</b> verisi olmalıdır.
+            Örneğin <b>www</b> projesi <b>www.example.com</b> sitesinin projesidir. 
+            Bu proje içindeki uploads klasörüne yükleme yapmak istiyorsanız o projenin ismini ve projenin içindeki hangi klasöre yükleme yapmak istediğinizi girmeniz gerekmektedir.
+            <br />
+            Projes
+            <ul>
+                <li>
+                    Dosya projesi: <b>Sitenin olduğu proje dosyasıdır.(www, www2, admin)</b>
+                </li>
+                <li>
+                    Proje Klasörü: <b>Projedeki dosyaların yükleneceği klasördür.</b> (www projesi için <b>wwwroot>uploads</b> gibi)
+                </li>
+                <li>
+                    Yayınlanacağı Adres: <b>Dosyanın websitelerine göre gösterilmesini sağlayan url'dir.</b> IIS'te o proje için bağladığınız <b>URL adresini</b> girmeniz gerekir. Örneğin,<br />
+                    <b>https://webbilir.com/dosya-ismi</b> buradaki linki <b>yayınlanacağı adresten alır.</b>
+                </li>
+            </ul>
+        </div>
+        <div class="table-responsive">
+            <table id="dataTable" class="table table-striped table-bordered" style="width:100%">
+                <thead>
+                    <tr>
+                        <th class="text-center info"><span class="mr-2">Tümü</span><input type="checkbox" class="table_select__checkbox_all"></th>
+                        <th class="noExport">Aktifleştir</th>
+                        <th>Site İsmi</th>
+                        <th>Yayınlanacağı Adres</th>
+                        <th>Dosya Projesi</th>
+                        <th class="noExport">İşlemler</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td class="text-center">
+                                <input type="checkbox" class="table_select__checkbox" value="1">
+                            </td>
+                            <td>
+                                @await Component.InvokeAsync("Link", new { viewName = "Activation", vm = new LinkViewModel { Title = "Aktifleştir", DataId = item.Id, IsActive = item.Enabled, DataUrl = "/admin/fileproject/PublishStatus" } })
+                            </td>
+                            <td>@item.Title</td>
+                            <td>@item.FullDomain</td>
+                            <td><span class="btn btn-sm btn-danger">@item.ProjectName</span></td>
+                            <td>
+                                @await Component.InvokeAsync("Link", new { viewName = "Default", vm = new LinkViewModel { Title = "Güncelle", Href = "/admin/fileproject/manage/" + item.Id } })
+                                @await Component.InvokeAsync("Link", new { viewName = "Delete", vm = new LinkViewModel { Title = "Sil", DataId = item.Id, DataUrl = "/admin/fileproject/delete" } })
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+            @await Component.InvokeAsync("Link", new { viewName = "Default", vm = new LinkViewModel { Title = "Yeni Ekle", Href = "/admin/" + ViewContext.RouteData.Values["controller"].ToString() + "/manage/" } })
+        </div>
+    </div>
+</div>
+
+@section libScript{
+    <!--Data Tables js-->
+    <script src="~/theme/assets/plugins/datatable/js/jquery.dataTables.min.js"></script>
+    <script src="~/js/my_lib/list_data_table.js"></script>
+    <script src="~/js/my_lib/table_select.js"></script>
+}
+@section libStyle{
+    <!--Data Tables -->
+    <link href="~/theme/assets/plugins/datatable/css/dataTables.bootstrap4.min.css" rel="stylesheet" type="text/css">
+    <link href="~/theme/assets/plugins/datatable/css/buttons.bootstrap4.min.css" rel="stylesheet" type="text/css">
+}

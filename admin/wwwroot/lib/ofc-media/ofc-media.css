@@ -1,0 +1,16 @@
+﻿.btn_remove__file{
+    margin-bottom:10px;
+}
+.file_upload__content{
+    margin:10px 0;
+}
+.file_upload__inbox
+{
+    height: 100%;
+    display: flex;
+    justify-content: flex-end;
+    flex-direction: column;
+}
+.media_modal__btn .badge{
+    margin-left:10px;
+}

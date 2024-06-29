@@ -1,0 +1,56 @@
+﻿@model List<Slide>
+@inject IUnitOfWork _uow
+@inject Wangkanai.Detection.Services.IDetectionService DetectionService
+
+@{
+    bool mobile = DetectionService.Device.Type == Wangkanai.Detection.Models.Device.Mobile;
+    var count = Model.Count();
+}
+<link href="~/css/slider.css" rel="stylesheet" />
+<!-- Full Page Image Background Carousel Header -->
+<div id="myCarousel" class="carousel slide pb-100">
+    <div class="carousel-indicators">
+        @for (int i = 0; i < count; i++)
+        {
+            <button type="button" data-bs-target="#myCarousel" data-bs-slide-to="@i" class="active" aria-current="true" aria-label="Slide @i"></button>
+        }
+    </div>
+    <!-- Wrapper for Slides -->
+    <div class="carousel-inner">
+        @foreach (var item in Model)
+        {
+            Media media = new Media();
+            if (mobile)
+            {
+                media = _uow.Media.GetMedia(Convert.ToInt32(item.paramMediaId2));
+            }
+            else
+            {
+                media = _uow.Media.GetMedia(Convert.ToInt32(item.paramMediaId1));
+            }
+
+            <div class="carousel-item">
+                <div class="fill">
+                    <img src="@media.Path">
+                </div>
+                <div class="carousel-caption">
+                    <p class="animated fadeInRight slider-sub-title">@item.sliderSubTitle</p>
+                    <p class="animated fadeInRight slider-description">@item.sliderDescription</p>
+                </div>
+            </div>
+
+        }
+        <!-- Controls -->
+        <button class="carousel-control-prev" type="button" data-bs-target="#myCarousel" data-bs-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Previous</span>
+        </button>
+        <button class="carousel-control-next" type="button" data-bs-target="#myCarousel" data-bs-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Next</span>
+        </button>
+
+    </div>
+</div>
+
+

@@ -1,0 +1,84 @@
+﻿@model Admin
+@await Component.InvokeAsync("Breadcrumb", new BreadcrumbViewModel { Title = "Profilim" })
+@inject IUnitOfWork _uow
+@{ 
+    string defaultImage = _uow.Admin.GetDefaultProfileAvatarSrc;
+    var adminAvatarSrc = defaultImage;
+}
+<div class="card radius-15">
+    <div class="card-body">
+        <div class="card-title">
+            <h4 class="mb-0">Profilim Düzenleme</h4>
+        </div>
+        <hr />
+        <div class="row">
+            <div class="col-md-2 col-12">
+                <img style="object-fit:cover;" class="rounded-circle border-dark border" width="200" height="200" src="@adminAvatarSrc" alt="user avatar">
+            </div>
+            <div class="col-md-10 col-12">
+                <form class="needs-validation" method="post" novalidate>
+                    <div class="row">
+                        <div class="col-md-6 col-sm-12 form-group">
+                            <label asp-for="Name">İsim</label>
+                            <input type="text" asp-for="Name" maxlength="128" class="form-control" placeholder="İsim" required>
+                            <div class="invalid-feedback">
+                                Lütfen isim giriniz.
+                            </div>
+                        </div>
+                        <div class="col-md-6 col-sm-12 form-group">
+                            <label asp-for="LastName">Soyisim</label>
+                            <input type="text" asp-for="LastName" maxlength="128" class="form-control" placeholder="Soyisim" required>
+                            <div class="invalid-feedback">
+                                Lütfen isim giriniz.
+                            </div>
+                        </div>
+                        <div class="col-md-6 col-sm-12 form-group">
+                            <label asp-for="Email">E-Posta</label>
+                            <input type="text" asp-for="Email" maxlength="256" class="form-control" placeholder="Email" required>
+                            <div class="invalid-feedback">
+                                Lütfen e-posta giriniz.
+                            </div>
+                        </div>
+                        <div class="col-md-6 col-sm-12 form-group">
+                            <label asp-for="Phone">Telefon Numarası</label>
+                            <input type="text" asp-for="Phone" maxlength="32" class="form-control" placeholder="Telefon No">
+                        </div>
+                        <div class="col-md-12 col-sm-12 form-group">
+                            <label asp-for="Password">Şifre</label>
+                            <input type="password" asp-for="Password" value="@Model.Password" maxlength="32" class="form-control" placeholder="Şifreniz" required>
+                            <div class="invalid-feedback">
+                                Lütfen şifre belirleyiniz.
+                            </div>
+                        </div>
+                        <div class="col-md-12 form-group">
+                            @await Component.InvokeAsync("FileUploadModal",
+                          new AdminFileUploadViewModel
+                          {
+                              FileUploadEntity = new FileUploadEntity
+                              {
+                                  FileAccept = "image/png, image/jpg, image/jpeg",
+                                  FilePath = "/admin/profile/",
+                                  Label = "Profil Fotoğrafı",
+                                  FileType = "image",
+                                  FileProjectId = _uow.FileProject.GetIdByProjectName("admin", null),
+                                  MediaId = Model.ImageMediaId == null ? null : Model.ImageMediaId.ToString(),
+                                  ParamMediaIdName = "ImageMediaId",
+                                  MediaWidth = 150,
+                                  MediaHeight = 150,
+                                  MediaTitle = Model == null ? "" : Model.Name + " " + Model.LastName,
+                              },
+                              AdminFileUploadModal = new AdminFileUploadModal
+                              {
+                                  ModalTitle = "Profil Fotoğrafı Yükleyin",
+
+                              }
+                          })
+                        </div>
+                    </div>
+                    @await Component.InvokeAsync("ButtonGroup", new { viewName = "Default", vm = new ButtonGroupViewModel { ListControllerName = ViewContext.RouteData.Values["controller"].ToString() } })
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+

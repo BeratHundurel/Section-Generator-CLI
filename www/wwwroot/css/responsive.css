@@ -1,0 +1,63 @@
+﻿/*mobile css*/
+@media only screen and (min-width: 0px) and (max-width: 560px) {
+	.w-sm-50 {
+		width: 50% !important;
+	}
+
+	.mb-75 {
+		margin-bottom: 75px !important;
+	}
+
+	.row {
+		margin-right: 0 !important;
+		margin-left: 0 !important;
+	}
+	/*Feature START*/
+	.feature-container h5 {
+		font-size: 21px !important;
+	}
+	/*Feature END*/
+
+	/*Discount --START*/
+	.discount-img {
+		height: 250px !important;
+	}
+
+	.discount-sm-box {
+		height: 275px !important;
+	}
+
+	.discount-section-row {
+		max-height: 100% !important;
+	}
+
+	.discount-sm-title {
+		font-size: 20px !important;
+	}
+
+	.discount-bg-tittle {
+		font-size: 40px !important;
+	}
+	/*Discount --END*/
+
+	/*Mens Section START*/
+	.mens-title {
+		font-size: 24px !important;
+	}
+	/*Mens Section END*/
+
+	/*News Section START*/
+	.section-title-6 h2 {
+		font-size: 24px !important;
+	}
+	/*News Section START*/
+
+	/*Whatsapp START*/
+	.fixDivWhatsapp img {
+		width: 30px;
+		height: 30px;
+	}
+	/*Whatsapp END*/
+
+
+}

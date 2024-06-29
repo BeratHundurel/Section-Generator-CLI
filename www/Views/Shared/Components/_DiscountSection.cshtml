@@ -1,0 +1,25 @@
+﻿@model SectionViewModel
+@inject IUnitOfWork _uow
+@{
+    Media media1 = _uow.Media.GetMedia(Model.paramMediaId1);
+    Media media2 = _uow.Media.GetMedia(Model.paramMediaId2);
+}
+
+<div class="container pb-60">
+    <div class="row justify-content-center discount-section-row w-100">
+        <div class="col-lg-6 col-12 discount-sm-box">
+            <img class="w-100 img-fluid object-fit-cover discount-img" src="@media1.Path" />
+            <div class="discount-content">
+                <h5 class="discount-sm-title">@Model.paramText1</h5>
+                <h3 class="discount-bg-tittle">@Model.paramText2</h3>
+            </div>
+        </div>
+        <div class="col-lg-6 col-12 discount-sm-box">
+            <img class="w-100 img-fluid object-fit-cover discount-img" src="@media2.Path" />
+            <div class="sec-discount-content">
+                <h5 class="discount-sm-title">@Model.paramText3</h5>
+                <h3 class="discount-bg-tittle">@Model.paramText4</h3>
+            </div>
+        </div>
+    </div>
+</div>

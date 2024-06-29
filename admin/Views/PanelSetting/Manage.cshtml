@@ -1,0 +1,140 @@
+﻿@model JsonPanelSetting
+@inject IUnitOfWork _uow
+
+@{
+    var adminProject = _uow.FileProject.GetByProjectName("admin", true);
+    int? adminProjectId = null;
+    if (adminProject != null)
+    {
+        adminProjectId = adminProject.Id;
+    }
+}
+
+@section libScript{
+    <script src='https://cdn.tiny.cloud/1/vdqx2klew412up5bcbpwivg1th6nrh3murc6maz8bukgos4v/tinymce/5/tinymce.min.js' referrerpolicy="origin">
+    </script>
+    <script>
+        tinymce.init({
+            selector: '.text-editor'
+        });
+    </script>
+}
+
+<div class="card radius-15">
+    <div class="card-body">
+        <div class="card-title">
+            <h4 class="mb-0">Panel Ayarları (Sadece Geliştiriciler İçin)</h4>
+        </div>
+        <hr>
+        <ul class="nav nav-tabs" id="myTab" role="tablist">
+            <li class="nav-item" role="presentation">
+                <a class="nav-link active" id="home-tab" data-toggle="tab" href="#general" role="tab" aria-controls="general" aria-selected="true">Genel</a>
+            </li>
+        </ul>
+        <div class="tab-content p-3" id="myTabContent">
+            <form id="formSetting" asp-action="manage" method="post" class="tab-content form-horizontal">
+                @if (TempData["SuccessMessage"] != null)
+                {
+                    <div class="alert alert-success">@TempData["SuccessMessage"]</div>
+                }
+                <div class="tab-pane fade active show" id="general" role="tabpanel" aria-labelledby="contact-tab">
+                    <div class="form-group">
+                        <label>Orjinal Logo</label>
+                        @await Component.InvokeAsync("FileUploadModal",
+                            new AdminFileUploadViewModel
+                            {
+                                FileUploadEntity = new FileUploadEntity
+                                {
+                                    FileAccept = "image/png, image/jfif, image/jpeg, image/jpg",
+                                    FilePath = "/setting/image/",
+                                    Label = "Ayarlar Orjinal Logo Fotoğrafı",
+                                    FileId = 1,
+                                    FileType = "image",
+                                    ParamMediaIdName = "websiteOriginalLogoMediaId",
+                                    MediaId = Model.websiteOriginalLogoMediaId.ToString(),
+                                    FileProjectId = adminProjectId,
+                                    MediaWidth = 200,
+                                    IsThereLanguageFolder = false
+                                },
+                                AdminFileUploadModal = new AdminFileUploadModal
+                                {
+                                    ModalTitle = "Orjinal Logo Yükleyin",
+                                }
+                            })
+                    </div>
+                    <div class="form-group">
+                        <label>
+                            Beyaz Logo
+                        </label>
+                        @await Component.InvokeAsync("FileUploadModal",
+                              new AdminFileUploadViewModel
+                              {
+                                  FileUploadEntity = new FileUploadEntity
+                                  {
+                                      FileAccept = "image/png, image/jfif, image/jpeg, image/jpg",
+                                      FilePath = "/setting/image/",
+                                      Label = "Ayarlar Beyaz Logo Fotoğrafı",
+                                      FileId = 2,
+                                      FileType = "image",
+                                      ParamMediaIdName = "websiteWhiteLogoMediaId",
+                                      MediaId = Model.websiteWhiteLogoMediaId.ToString(),
+                                      FileProjectId = adminProjectId,
+                                      MediaWidth = 200,
+                                      IsThereLanguageFolder = false
+                                  },
+                                  AdminFileUploadModal = new AdminFileUploadModal
+                                  {
+                                      ModalTitle = "Beyaz Logo Yükleyin",
+                                  }
+                              })
+                    </div>
+                    <div class="form-group">
+                        <label>
+                            Giriş Yapın Fotoğrafı
+                        </label>
+                        @await Component.InvokeAsync("FileUploadModal",
+                              new AdminFileUploadViewModel
+                              {
+                                  FileUploadEntity = new FileUploadEntity
+                                  {
+                                      FileAccept = "image/png, image/jfif, image/jpeg, image/jpg",
+                                      FilePath = "/setting/image/",
+                                      FileId = 3,
+                                      FileType = "image",
+                                      MediaId = Model.loginImageMediaId.ToString(),
+                                      //Yönetim paneline dosyayı eklemesi için id belirttim.
+                                      FileProjectId = adminProjectId,
+                                      ParamMediaIdName = "loginImageMediaId",
+                                      IsThereLanguageFolder = false
+                                  },
+                                  AdminFileUploadModal = new AdminFileUploadModal
+                                  {
+                                      ModalTitle = "Giriş Yapın Sayfası Fotoğrafı Yükleyin",
+                                  }
+                              })
+                    </div>
+                    <div class="form-group">
+                        <label>
+                            Projenin İsmi
+                        </label>
+                        <input asp-for="websiteName" class="form-control" placeholder="Website Adını Giriniz." />
+                    </div>
+                    <div class="form-group">
+                        <label>
+                            Hakkımızda
+                        </label>
+                        <textarea asp-for="welcomeAfterLoginText" class="text-editor"></textarea>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="col-md-10">
+                        <input class="btn btn-default btn-admin" value="Kaydet" type="submit" />
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+

@@ -1,0 +1,169 @@
+﻿@model AdminPageViewModel
+@inject IUnitOfWork _uow
+
+@{
+    ViewData["Title"] = "Kullanıcı Girişleri";
+    IQueryable<Language> lang = _uow.Language.GetAll();
+    IQueryable<string> userIpByList = Model.strings;
+}
+
+@await Component.InvokeAsync("Breadcrumb", new BreadcrumbViewModel { Title = "Kullanıcı Girişleri" })
+
+<div class="card">
+    <div class="card-body">
+        <div class="card-title">
+            <h4 class="mb-0">Kullanıcı Girişleri</h4>
+        </div>
+        <hr />
+        @*<div class="row">
+                <div class="col-lg-5">
+                    <select class="filter-select-web select-dropdown">
+                        <option selected>Filtrelemek İçin İstediğiniz Dili Seçiniz...</option>
+
+                        @foreach (var item in lang)
+                        {
+                            <option value="@item.Id" class="filter-option-lang">@item.Title</option>
+                        }
+
+                    </select>
+                </div>
+                <div class="col-lg-5">
+                    <select class="filter-select-lang select-dropdown">
+                        <option selected>Filtrelemek İçin İstediğiniz Website Id Seçiniz...</option>
+
+                        @foreach (var item in website)
+                        {
+                            <option value="@item.Id" class="filter-option-lang">@item.Id</option>
+
+                        }
+
+                    </select>
+                </div>
+                <div class="col-lg-2">
+                    <button type="button" class="btn btn-secondary px-5 filter-btn">Filtrele</button>
+                </div>
+            </div>*@
+
+        <form asp-action="list" method="get">
+            <div class="row mb-3">
+                <div class="col-lg-2">
+                    <select class="form-control" asp-for="f.langId">
+                        <option value="">Dili Seçiniz...</option>
+                        @foreach (var item in lang)
+                        {
+                            <option value="@item.Id" class="filter-option-lang">@item.Title</option>
+                        }
+                    </select>
+                </div>
+                <div class="col-lg-2">
+                    <select class="form-control" asp-for="f.ip">
+                        <option value="">Ip Seçiniz...</option>
+                        @foreach (var item in userIpByList)
+                        {
+                            <option value="@item" class="filter-option-lang">@item</option>
+                        }
+                    </select>
+                </div>
+                <div class="col-lg-3">
+                    <select asp-for="f.userId" class="form-control">
+                        <option value="">Kullanıcı seçiniz.</option>
+                        @foreach (var item in _uow.Admin.GetAll(false))
+                        {
+                            <option value="@item.Id">@item.Name @item.LastName</option>
+                        }
+                    </select>
+                </div>
+                <div class="col-lg-3">
+                    <select asp-for="f.pageSize" class="form-control">
+                        <option value="">Tek seferde bu kadar göster..</option>
+                        <option value="10">10</option>
+                        <option value="25">25</option>
+                        <option value="50">50</option>
+                        <option value="100">100</option>
+                        <option value="250">250</option>
+                        <option value="500">500</option>
+                        <option value="1000">1000</option>
+                        <option value="2000">2000</option>
+                        <option value="5000">5000</option>
+                    </select>
+                </div>
+                <div class="col-lg-3 mt-2">
+                    <input type="submit" class="btn btn-info" value="Filtrele" />
+                    <a asp-action="list" class="btn btn-outline-info">Sıfırla</a>
+                </div>
+            </div>
+        </form>
+        <div class="table-responsive filter-table">
+            <table id="dataTable" class="table table-striped table-bordered">
+                <thead>
+                    <tr>
+                        <th>Dil</th>
+                        <th>Kullanıcı ID</th>
+                        <th>Kullanıcı IP</th>
+                        <th>Giriş Tarihi</th>
+                    </tr>
+                </thead>
+                <tbody class="table-top">
+                    @foreach (var item in Model.AdminLogins)
+                    {
+                        <tr class="table-item">
+                            <td>
+                                @if (item.LangId == 0)
+                                {
+                                    <span>DİL YOK</span>
+                                }
+                                @if (item.LangId == 1)
+                                {
+                                    <span>TR</span>
+                                }
+                                @if (item.LangId == 2)
+                                {
+                                    <span>EN</span>
+                                }
+                            </td>
+                            <td>@item.AdminId</td>
+                            <td>@item.UserIp</td>
+                            <td>@item.LoginDate</td>
+                        </tr>
+                    }
+
+                </tbody>
+            </table>
+            <div class="pagination-button">
+                @{
+                    var prevDisabled = !Model.AdminLogins.PreviousPage ? "disabled" : "";
+                    var nextDisabled = !Model.AdminLogins.NextPage ? "disabled" : "";
+                }
+                <form method="get">
+                    <input type="hidden" name="f.langId" value="@Model.f.langId" />
+                    <input type="hidden" name="f.ip" value="@Model.f.ip" />
+                    <input type="hidden" name="f.userId" value="@Model.f.userId" />
+                    <input type="hidden" name="f.pageSize" value="@Model.f.pageSize" />
+                    <input type="hidden" name="f.pageNumber" value="@(Model.AdminLogins.PageIndex - 1)" />
+                    <button type="submit" class="btn btn-secondary @prevDisabled">Geri</button>
+                </form>
+                <form method="get">
+                    <input type="hidden" name="f.langId" value="@Model.f.q" />
+                    <input type="hidden" name="f.ip" value="@Model.f.ip" />
+                    <input type="hidden" name="f.userId" value="@Model.f.userId" />
+                    <input type="hidden" name="f.pageSize" value="@Model.f.pageSize" />
+                    <input type="hidden" name="f.pageNumber" value="@(Model.AdminLogins.PageIndex + 1)" />
+                    <button type="submit" class="ml-1 btn btn-secondary @nextDisabled">İleri</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section libScript{
+    <!--Data Tables js-->
+    <script src="~/theme/assets/plugins/datatable/js/jquery.dataTables.min.js"></script>
+    <script src="~/js/my_lib/list_data_table.js"></script>
+    <script src="~/js/my_lib/table_select.js"></script>
+    <script src="~/js/site.js"></script>
+}
+@section libStyle{
+    <!--Data Tables -->
+    <link href="~/theme/assets/plugins/datatable/css/dataTables.bootstrap4.min.css" rel="stylesheet" type="text/css">
+    <link href="~/theme/assets/plugins/datatable/css/buttons.bootstrap4.min.css" rel="stylesheet" type="text/css">
+}

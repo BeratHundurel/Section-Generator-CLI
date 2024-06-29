@@ -1,0 +1,53 @@
+﻿@model Contact
+@await Component.InvokeAsync("Breadcrumb", new BreadcrumbViewModel { Title = "Mesaj Oku" })
+
+<div class="card radius-15">
+    <div class="card-body">
+        <div class="card-title">
+            <h4 class="mb-0">Mesajı Oku</h4>
+        </div>
+        <hr />
+        <div class="form-row">
+            <div class="col-md-6 col-12 form-group">
+                <label asp-for="Name">Adı</label>
+                <input readonly class="form-control" asp-for="Name">
+            </div>
+            <div class="col-md-6 col-12 form-group">
+                <label asp-for="Surname">Soyadı</label>
+                <input readonly class="form-control" asp-for="Surname">
+            </div>
+            <div class="col-md-6 col-12 form-group">
+                <label asp-for="Email">E-Posta</label>
+                <input readonly class="form-control" asp-for="Email">
+            </div>
+@*            <div class="col-md-6 col-12 form-group">
+                <label asp-for="Company">Kurum/Şirket</label>
+                <input readonly class="form-control" asp-for="Company">
+            </div>*@
+            <div class="col-md-6 col-12 form-group">
+                <label asp-for="Phone">Telefon No</label>
+                <input readonly class="form-control" asp-for="Phone">
+            </div>
+            <div class="col-md-6 col-12 form-group">
+                <label asp-for="CreatedIp">Gönderilen Ip</label>
+                <input readonly class="form-control" asp-for="CreatedIp">
+            </div>
+            <div class="col-md-6 col-12 form-group">
+                <label asp-for="CreatedDate">Gönderim Tarihi</label>
+                <input readonly class="form-control" asp-for="CreatedDate">
+            </div>
+            <hr />
+@*            <div class="col-md-12 col-12 form-group">
+                <label asp-for="Subject">Konu</label>
+                <input readonly class="form-control border-info" asp-for="Subject">
+            </div>*@
+            <div class="col-md-12 col-12 form-group">
+                <label asp-for="Message">Mesaj</label>
+                <textarea readonly class="form-control border-info" asp-for="Message"></textarea>
+            </div>
+        </div>
+
+        @await Component.InvokeAsync("ButtonGroup", new { viewName = "Default", vm = new ButtonGroupViewModel { ListControllerName = ViewContext.RouteData.Values["controller"].ToString() } })
+    </div>
+</div>
+

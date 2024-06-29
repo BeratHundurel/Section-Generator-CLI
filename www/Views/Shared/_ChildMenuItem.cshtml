@@ -1,0 +1,38 @@
+﻿@model MenuViewModel
+@inject IUnitOfWork _uow
+
+@{
+
+	var childItems = Model.Menu.children;
+
+}
+
+@if (childItems != null)
+{
+	<ul class="dropdown-menu d-block-hover mobile-dropdown">
+		@foreach (var child in childItems)
+		{
+			if (child.children != null)
+			{
+				<li class="sub-menu">
+					<div class="d-flex justify-content-between align-items-center">
+					<a aria-expanded="false" style="padding: 4px 16px;" class="nav-link" target="@child.target" href="@child.href">@child.text</a>
+					<i class="fa-solid fa-chevron-up text-dark"></i>
+					<partial name="_ChildSubMenuItem" model="new MenuViewModel{ Menus = Model.Menus, Menu = child}" />
+					</div>
+				</li>
+			}
+			else
+			{
+				<li class="sub-menu">
+					<div class="d-flex justify-content-between align-items-center">
+					<a aria-expanded="false" href="@child.href" style="padding: 4px 16px;" class="nav-link" target="@child.target" href="@child.href">@child.text</a>
+					<i class="fa-solid fa-chevron-up text-dark"></i>
+					</div>
+				</li>
+			}
+		}
+	</ul>
+}
+
+

@@ -1,0 +1,54 @@
+﻿@model SectionViewModel
+@inject IUnitOfWork _uow
+
+@{
+    Media media1 = _uow.Media.GetMedia(Model.paramMediaId1);
+    Media media2 = _uow.Media.GetMedia(Model.paramMediaId2);
+    Media media3 = _uow.Media.GetMedia(Model.paramMediaId3);
+}
+
+<div class="blog-area pb-80">
+    <div class="container">
+        <div class="section-title-6 mb-50 text-center">
+            <h2>Latest News</h2>
+        </div>
+        <div class="row">
+            <div class="col-lg-4 col-md-6 col-sm-6">
+                <div class="blog-wrap mb-30 scroll-zoom">
+                    <div class="blog-img mb-10">
+                        <a href="blog-details.html"><img src=@media2.Path alt =""></a>
+                        <span class="red">Lifestyle</span>
+                    </div>
+                    <div class="blog-content-3 text-center">
+                        <h3><a href="blog-details.html">Lorem ipsum dolor sit amet cons adipisic elit.</a></h3>
+                        <span>By: <a href="#">Shop Admin</a></span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4 col-md-6 col-sm-6">
+                <div class="blog-wrap mb-30 scroll-zoom">
+                    <div class="blog-img mb-10">
+                        <a href="blog-details.html"><img src=@media2.Path alt=""></a>
+                        <span class="red">Lifestyle</span>
+                    </div>
+                    <div class="blog-content-3 text-center">
+                        <h3><a href="blog-details.html">Lorem ipsum dolor sit amet cons adipisic elit.</a></h3>
+                        <span>By: <a href="#">Shop Admin</a></span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4 col-md-6 col-sm-6">
+                <div class="blog-wrap mb-30 scroll-zoom">
+                    <div class="blog-img mb-10">
+                        <a href="blog-details.html"><img src=@media3.Path alt=""></a>
+                        <span class="red">Lifestyle</span>
+                    </div>
+                    <div class="blog-content-3 text-center">
+                        <h3><a href="blog-details.html">Lorem ipsum dolor sit amet cons adipisic elit.</a></h3>
+                        <span>By: <a href="#">Shop Admin</a></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

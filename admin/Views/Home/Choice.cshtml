@@ -1,0 +1,25 @@
+﻿@inject IUnitOfWork _uow
+
+@{
+    Layout = "_AccountLayout";
+}
+
+<form asp-controller="home" asp-action="choice" asp-route-returnUrl="@ViewBag.returnUrl" method="post" class="choice-page container-fluid">
+    <div class="form-group">
+        <label>Dil Seçiniz</label>
+        <select class="form-control" name="langId" required>
+            <option value="">Lütfen site dili seçiniz.</option>
+            @foreach (var item in _uow.Language.GetAll())
+            {
+                <option value="@item.Id">@item.Title</option>
+            }
+        </select>
+    </div>
+    @{ 
+        ButtonViewModel bvm = new ButtonViewModel
+        {
+            Title = "Giriş Yap"
+        };
+    }
+    @await Component.InvokeAsync("Button", new { vm = bvm})
+</form>

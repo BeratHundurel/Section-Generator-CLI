@@ -1,0 +1,291 @@
+﻿@model PageViewModel
+@inject IUnitOfWork _uow
+
+@{
+    ViewData["Title"] = "Header - Üst Bölüm";
+    var pageId = Context.Request.Query["pageid"];
+
+    var isDeveloper = _uow.Admin.IsAccessByRole("developer");
+    var headerMediaId = Model.Header.paramMediaId1; //For Image
+    var headerMediaVideoId = Model.Header.paramMediaId2; //For Video
+}
+
+@section libStyle{
+
+    <!-- Summernote -->
+    <link href="~/lib/summernote/summernote-lite.min.css" rel="stylesheet" />
+    <!-- CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/smartwizard@5/dist/css/smart_wizard_all.min.css" rel="stylesheet" type="text/css" />
+}
+@section libScript{
+    <script src="~/lib/jquery-ui/jquery-ui.min.js"></script>
+    <script src="~/lib/jquery-serialize/jquery.serialize-object.min.js"></script>
+    <script src="~/lib/portlet-draggable/portlet-draggable.js"></script>
+    <!-- JavaScript -->
+
+    <script src="~/lib/summernote/summernote-lite.min.js"></script>
+    <script src="~/js/my_lib/my_summernote_settings.js" asp-append-version="true"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/smartwizard@5/dist/js/jquery.smartWizard.min.js" type="text/javascript"></script>
+    <script src="~/js/my_lib/page_form.js"></script>
+}
+
+<div class="card">
+    <div class="card-header">Sayfalar</div>
+    <div class="card-body">
+        <div class="page_overlay">
+            <div class="spinner-grow" style="width: 3rem; height: 3rem;" role="status">
+                <span class="sr-only">Loading...</span>
+            </div>
+        </div>
+        <form class="needs-validation" novalidate method="post">
+            <!-- SmartWizard html -->
+            <div id="smartwizard">
+                <ul class="nav">
+                    <li class="nav-item">
+                        <a class="nav-link" href="#step-1">
+                            <strong>Genel</strong>
+                            <br>Genel düzenlemeleri yapabilirsiniz.
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#step-2">
+                            <strong>Bölümler</strong>
+                            <br>Sayfa içerisindeki bölümleri düzenleyebilirsiniz.
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#step-3">
+                            <strong>Slayt</strong>
+                            <br>Fotoğraf ya da video slaytı ekleyin.
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#step-4">
+                            <strong>Üst Başlık (Header)</strong>
+                            <br>Sayfa başlığı, kapak fotoğrafı ya da açıklaması ekleyin.
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#step-5">
+                            <strong>SEO</strong>
+                            <br>Arama motoru otomasyonu yapabilirsiniz.
+                        </a>
+                    </li>
+                </ul>
+                <div class="tab-content">
+                    <div id="step-1" class="tab-pane" role="tabpanel" aria-labelledby="step-1">
+                        <h3>Genel</h3>
+                        <input type="hidden" asp-for="Page.Id" />
+                        <div class="row">
+                            <div class="col-md-12 col-sm-12 form-group">
+                                <label asp-for="Page.Title">Ana Başlık</label>
+                                <input type="text" asp-for="Page.Title" maxlength="512" class="form-control" placeholder="Başlık" required>
+                                <div class="invalid-feedback">
+                                    Lütfen başlık giriniz.
+                                </div>
+                            </div>
+                            @if (isDeveloper)
+                            {
+                                <div class="col-md-12 col-sm-12 form-group">
+                                    <label>Sayfa Türü</label>
+                                    <select asp-for="Page.PageTypeId" class="form-control" required>
+                                        @{ 
+                                            int normalPageTypeId = _uow.PageType.GetNormalPageTypeId;
+                                        }
+                                        <option value="@normalPageTypeId">Normal Sayfa</option>
+                                        @foreach (var item in _uow.PageType.GetAll().Where(p=>p.Id != normalPageTypeId))
+                                        {
+                                            <option value="@item.Id">@item.TypeTitle</option>
+                                        }
+                                    </select>
+                                    <div class="invalid-feedback">
+                                        Lütfen sayfa türü seçiniz.
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                    </div>
+                    <div id="step-2" class="tab-pane section_tab_pane" role="tabpanel" aria-labelledby="step-2">
+                        <h3>Bölümler</h3>
+                        <input type="hidden" class="sectionsJsonData" asp-for="Page.SectionsJsonData" value="@Json.Serialize(Model.Sections)" />
+                        <div class="row">
+                            <div class="col-xl-4 col-md-6 col-sm-12 section-link">
+                                @await Component.InvokeAsync("PageSections")
+                            </div>
+                            <div class="col-xl-8 col-md-6 col-sm-12">
+                                <div class="alert alert-info sectionsInfo">
+                                    <h4 class="alert-heading">Bölümler hakkında bilgilendirme</h4>
+                                    <p> Alt tarafta buluna linklere tıklayarak sayfanın içinde yer alacak bölümleri ekleyebilisiniz. </p>
+                                </div>
+                                <div id="sectionsHtml" class="sortable sections_html">
+                                    @if (Model != null)
+                                    {
+                                        @foreach (var item in Model.Sections)
+                                        {
+                                            SectionItemViewModel sivm = new SectionItemViewModel
+                                            {
+                                                SectionName = item.sectionName,
+                                                ViewName = item.sectionName,
+                                                SVM = item,
+                                                IsCollapsed = true
+                                            };
+                                            @await Component.InvokeAsync("SectionItem", sivm)
+                                        }
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="step-3" class="tab-pane section_tab_pane" role="tabpanel" aria-labelledby="step-4">
+                        <h3>Slaytlar</h3>
+                        <input type="hidden" class="slidersJsonData" asp-for="Page.SlidersJsonData" value="@Json.Serialize(Model.Sections)" />
+                        <div class="row">
+                            <div class="col-xl-4 col-md-6 col-sm-12">
+                                <a data-url='@Url.Action("sectionManager", "page", new { sectionName = "_Slider" })'
+                                   class="section_add__btn btn btn-outline-info btn-block">
+                                    Slider ekle
+                                </a>
+                            </div>
+                            <div class="col-xl-8 col-md-6 col-sm-12">
+                                <div class="alert alert-info sectionsInfo">
+                                    <h4 class="alert-heading">Slider hakkında bilgilendirme</h4>
+                                    <p> Sol tarafta bulunan linke tıklayarak yeni slider ekleyebilirsiniz</p>
+                                </div>
+                                <div id="slidersHtml" class="sortable sections_html">
+                                    @if (Model != null)
+                                    {
+                                        @foreach (var item in Model.Slides.OrderBy(p=>p.order))
+                                        {
+                                            SectionItemViewModel sivm = new SectionItemViewModel
+                                            {
+                                                SectionName = item.sectionName,
+                                                ViewName = item.sectionName,
+                                                Slide = item
+                                            };
+                                            @await Component.InvokeAsync("SectionItem", sivm)
+                                        }
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="step-4" class="tab-pane" role="tabpanel" aria-labelledby="step-3">
+                        <h3>Üst Başlık</h3>
+                        <div class="row">
+                            <div class="col-sm-12 form-group">
+                                <label>Başlık</label>
+                                <input type="text" class="form-control" asp-for="Header.headerTitle"  />
+                                <div class="invalid-feedback">
+                                    Lütfen başlık giriniz.
+                                </div>
+                            </div>
+                            <div class="col-sm-12 form-group">
+                                <label class="control-label ">
+                                    Alt Başlık
+                                </label>
+                                <input type="text" class="form-control" asp-for="Header.headerSubTitle" />
+                            </div>
+                            <div class="col-sm-12 form-group">
+                                <label class="control-label ">
+                                    Arkaplan Rengi
+                                </label>
+                                <input type="color" class="form-control" asp-for="Header.headerColor" />
+                            </div>
+                            <div class="col-md-6 col-sm-12 form-group">
+                                @await Component.InvokeAsync("FileUploadModal",
+                                           new AdminFileUploadViewModel
+                                           {
+                                               FileUploadEntity = new FileUploadEntity
+                                               {
+                                                   FileAccept = "image/*",
+                                                   FilePath = "/header/page/",
+                                                   Label = "Header Fotoğrafı",
+                                                   FileId = 1,
+                                                   FileType = "image",
+                                                   MediaId = headerMediaId.ToString(),
+                                               },
+                                               AdminFileUploadModal = new AdminFileUploadModal
+                                               {
+                                                   ModalTitle = "Fotoğraf Yükleyin",
+                                               }
+                                           })
+                            </div>
+                            <div class="col-md-6 col-sm-12 form-group">
+                                @await Component.InvokeAsync("FileUploadModal",
+                               new AdminFileUploadViewModel
+                               {
+                                   FileUploadEntity = new FileUploadEntity
+                                   {
+                                       FileAccept = "video/mp4",
+                                       FilePath = "/header/page/",
+                                       Label = "Header Videosu",
+                                       FileId = 2,
+                                       FileType = "video",
+                                       MediaId = headerMediaVideoId.ToString(),
+                                   },
+                                   AdminFileUploadModal = new AdminFileUploadModal
+                                   {
+                                       ModalTitle = "Video Yükleyin"
+                                   }
+                               })
+                            </div>
+                        </div>
+                        <div class="accordion" id="header_accordion">
+                            <div class="card">
+                                <button class="btn btn-sm btn-admin collapsed" type="button" data-toggle="collapse" data-target="#header_collapse_link" aria-expanded="true" aria-controls="header_collapse_link">
+                                    Üst Kapak Linkleri
+                                    <i class="lni lni-chevron-down ml-2"></i>
+                                </button>
+                                <div id="header_collapse_link" class="collapse" aria-labelledby="header_heading_link" data-parent="#header_accordion">
+                                    <div class="card-body">
+                                        <div class="form-group">
+                                            <label class="control-label ">
+                                                Link 1 Başlık
+                                            </label>
+                                            <input type="text" class="form-control" asp-for="Header.headerButtonText1" />
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label ">
+                                                Link 1
+                                            </label>
+                                            <input type="text" class="form-control" asp-for="Header.headerButtonLink1" />
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label ">
+                                                Link 2 Başlık
+                                            </label>
+                                            <input type="text" class="form-control" asp-for="Header.headerButtonText2" />
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label ">
+                                                Link 2
+                                            </label>
+                                            <input type="text" class="form-control" asp-for="Header.headerButtonLink2" />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="step-5" class="tab-pane" role="tabpanel" aria-labelledby="step-4">
+                        <h3>Arama Motoru SEO Ayarları</h3>
+                        <div class="row">
+                            <div class="col-sm-12 form-group">
+                                <label asp-for="Page.SeoTitle">Seo Başlık</label>
+                                <input asp-for="Page.SeoTitle" type="text" maxlength="128" class="form-control" placeholder="Seo başlık belirtiniz." required>
+                            </div>
+                            <div class="col-sm-12 form-group">
+                                <label>Seo Açıklama</label>
+                                <textarea asp-for="Page.SeoDescription" maxlength="150" rows="2" class="form-control" placeholder="Seo açıklama belirtiniz." required></textarea>
+                                <div class="invalid-feedback">
+                                    Lütfen seo açıklaması giriniz.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>

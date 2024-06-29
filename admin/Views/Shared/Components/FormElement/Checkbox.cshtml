@@ -1,0 +1,8 @@
+﻿@model FormElementViewModel
+@{ 
+    var itemValue = Model.BoolValue == true ? false : true;
+}
+<div class="custom-control custom-checkbox">
+    <input class="custom-control-input checkbox_command__btn" data-value="@itemValue" data-url="@Model.DataUrl" data-id="@Model.ItemId" type="checkbox" id="customCheck_@Model.ItemId" @(Convert.ToBoolean(Model.BoolValue) ? "checked" : string.Empty)>
+    <label class="custom-control-label" for="customCheck_@Model.ItemId">@Model.Title</label>
+</div>

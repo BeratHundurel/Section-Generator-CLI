@@ -1,0 +1,92 @@
+﻿@model Admin
+@inject IUnitOfWork _uow
+
+@{
+    Layout = "_AccountLayout";
+    //Panel ayarlarından alınan giriş fotoğrafı alınıyor.
+    JsonPanelSetting panelSetting = _uow.PanelSetting.GetFirstPanelSetting();
+    Media loginImageMedia = _uow.Media.GetMedia(panelSetting.loginImageMediaId);
+}
+
+@section style{
+    <style>
+        .login-img{
+            object-fit:cover;
+        }
+        .login_card
+        {
+            min-width: 700px;
+            max-width: 100%;
+        }
+
+        @@media(max-width:700px)
+        {
+            .login_card
+            {
+                min-width: initial;
+                max-width: 100%;
+            }
+        }
+    </style>
+}
+<div class="col-12 col-lg-10 mx-auto login_card">
+    <div class="card radius-15">
+        <div class="row no-gutters">
+            <div class="col-lg-6">
+                <div class="card-body p-md-5">
+                    <div class="text-center">
+                        @*<img src="assets/images/logo-icon.png" width="80" alt="">*@
+                        <h3 class="mt-4 font-weight-bold">Hoş Geldiniz!</h3>
+                    </div>
+                    <div class="login-separater text-center">
+                        <span>Giriş Yapın</span>
+                        <hr />
+                        @if (ViewBag.WrongPassword != null)
+                        {
+                            <div class="alert alert-info">@ViewBag.WrongPassword</div>
+                        }
+                    </div>
+                    @if (panelSetting.isSetup == false)
+                    {
+                        <a asp-controller="setup" asp-action="start">
+                            <div class="alert alert-danger">
+                                İLK KURULUMU YAPMAk İÇİN TIKLAYIN
+                            </div>
+                        </a>
+                    }
+                    <form asp-controller="home" asp-action="login" method="post">
+                        <div class="form-group mt-4">
+                            <label>E-posta Adresi</label>
+                            <input type="text" class="form-control" asp-for="Email" placeholder="E-posta adresinizi giriniz." required />
+                        </div>
+                        <div class="form-group">
+                            <label>Şifre</label>
+                            <input type="password" class="form-control" asp-for="Password" placeholder="Şifrenizi giriniz." required />
+                        </div>
+                        @*<div class="form-row">
+                                <div class="form-group col">
+                                    <div class="custom-control custom-switch">
+                                        <input type="checkbox" class="custom-control-input" id="customSwitch1" checked>
+                                        <label class="custom-control-label" for="customSwitch1">Remember Me</label>
+                                    </div>
+                                </div>
+                                <div class="form-group col text-right">
+                                    <a href="authentication-forgot-password.html"><i class='bx bxs-key mr-2'></i>Forget Password?</a>
+                                </div>
+                            </div>*@
+                        <div class="btn-group mt-3 w-100">
+                            <button type="submit" class="btn btn-primary btn-block">Giriş Yap</button>
+                            <button type="button" class="btn btn-primary">
+                                <i class="lni lni-arrow-right"></i>
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <div class="col-lg-6 d-flex align-items-center justify-content-center">
+               @* <img src="@_uow.Media.GetFullFilePathFromMedia(loginImageMedia)" class="card-img login-img h-100" alt="...">*@
+            </div>
+        </div>
+        <!--end row-->
+    </div>
+</div>

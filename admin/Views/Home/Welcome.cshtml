@@ -1,0 +1,22 @@
+﻿@inject IUnitOfWork _uow
+@{
+    Admin admin = _uow.Admin.GetById(_uow.Admin.GetIdByAdmin);
+    JsonPanelSetting ps = _uow.PanelSetting.GetFirstPanelSetting();
+}
+
+<div class="card radius-15">
+    <div class="card-body">
+        <div class="card-title">
+            <h4>Merhaba, @admin.Name @admin.LastName</h4>
+        </div>
+        <hr />
+        @Html.Raw(ps.welcomeAfterLoginText)
+        <hr class="my-4">
+        <p class="lead">
+            @if (ps.websiteDocumentationId != 0)
+            {
+                <a class="btn btn-primary btn-lg" asp-controller="documentation" asp-action="index" asp-route-documentationId="@ps.websiteDocumentationId" role="button">Dökümantasyona Git</a>
+            }
+        </p>
+    </div>
+</div>

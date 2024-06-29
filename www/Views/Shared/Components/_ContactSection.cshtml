@@ -1,0 +1,113 @@
+﻿@model SectionViewModel
+@inject IUnitOfWork _uow
+
+@{
+    var langNow = _uow.Cookie.GetUserLanguageId;
+    Media media1 = _uow.Media.GetMedia(Model.paramMediaId1);
+}
+<link href="~/css/contact.css" rel="stylesheet" />
+@if (langNow == 3){
+<section class="container pt-100 pb-100">
+    <div class="row">
+        <div class="col-12 col-lg-6 px-4 mb-5">
+            <h3>Contact</h3>
+            <p><strong>Address:</strong>@Model.paramText1</p>
+            <p><strong>Customer service:</strong>@Model.paramText2</p>
+            <p><strong>Contact exclusively for ecommerce requests:</strong> @Model.paramText3</p>
+            @* <p><strong>Fax:</strong> @Model.paramText3</p>
+            <p><strong>Mobile: </strong>@Model.paramText4</p>
+            <p><strong>Email: </strong>@Model.paramText5</p> *@
+        </div>
+        <div class="col-12 col-lg-6 px-4">
+            <form class="needs-validation row" novalidate hx-post="/action/contact" hx-target="#feedback" hx-swap="outerHTML" id="contact-layout">
+                <div class="col-12 mb-3">
+                    <label for="name" class="form-label">Your Name</label>
+                    <input class="form-control" name="name" required />
+                    <div class="invalid-feedback">
+                        Please write your name.
+                    </div>
+                </div>
+                <div class="col-12 mb-3">
+                    <label for="email" class="form-label">Your Email</label>
+                    <input class="form-control" name="email" required />
+                    <div class="invalid-feedback">
+                        Please write your email.
+                    </div>
+                </div>
+                <div class="col-12 mb-3">
+                    <label for="subject" class="form-label">Subject</label>
+                    <input class="form-control" name="subject" required />
+                    <div class="invalid-feedback">
+                        Please write your subject.
+                    </div>
+                </div>
+                <div class="col-12 mb-3">
+                    <label for="message" class="form-label">Message</label>
+                    <input class="form-control" name="message" required />
+                    <div class="invalid-feedback">
+                        Please write your meessage.
+                    </div>
+                </div>
+                <div class="col-12 mb-3">
+                    <a id="contact-form-btn" class="btn">Send</a>
+                </div>
+            </form>
+            <p id="feedback"></p>
+        </div>
+    </div>
+    </section>
+}
+else
+{
+    <section class="container pt-100 pb-100">
+        <div class="row">
+            <div class="col-12 col-lg-6 px-4 mb-5">
+                <h3>CONTATTACI</h3>
+                <p><strong>Contatti aziendali:</strong>@Model.paramText1</p>
+                <p><strong>Servizio Clienti:</strong>@Model.paramText2</p>
+                <p><strong>Contatti esclusivamente per richieste ecommerce:</strong> @Model.paramText3</p>
+                @* <p><strong>Fax:</strong> @Model.paramText3</p>
+                <p><strong>Mobile: </strong>@Model.paramText4</p>
+                <p><strong>Email: </strong>@Model.paramText5</p> *@
+            </div>
+            <div class="col-12 col-lg-6 px-4">
+                <form class="needs-validation row" novalidate hx-post="/action/contact" hx-target="#feedback" hx-swap="outerHTML" id="contact-layout">
+                    <div class="col-12 mb-3">
+                        <label for="name" class="form-label">Nome e Cognome</label>
+                        <input class="form-control" name="name" required />
+                        <div class="invalid-feedback">
+                            Nome e Cognome
+                        </div>
+                    </div>
+                    <div class="col-12 mb-3">
+                        <label for="email" class="form-label">La tua Mail</label>
+                        <input class="form-control" name="email" required />
+                        <div class="invalid-feedback">
+                           La tua Mail
+                        </div>
+                    </div>
+                    <div class="col-12 mb-3">
+                        <label for="subject" class="form-label">Telefono</label>
+                        <input class="form-control" name="subject" required />
+                        <div class="invalid-feedback">
+                            Telefono
+                        </div>
+                    </div>
+                    <div class="col-12 mb-3">
+                        <label for="message" class="form-label">Messaggio</label>
+                        <input class="form-control" name="message" required />
+                        <div class="invalid-feedback">
+                            Messaggio
+                        </div>
+                    </div>
+                    <div class="col-12 mb-3">
+                        <a id="contact-form-btn" class="btn contact-form-btn-ıt">Invia il tuo messaggio</a>
+                    </div>
+                </form>
+                <p id="feedback"></p>
+            </div>
+        </div>
+    </section>
+}
+
+

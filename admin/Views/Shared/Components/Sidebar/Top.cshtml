@@ -1,0 +1,19 @@
+﻿@inject IUnitOfWork _uow
+
+@{ 
+    //Panel ayarlarından alınan giriş fotoğrafı alınıyor.
+    JsonPanelSetting panelSetting = _uow.PanelSetting.GetFirstPanelSetting();
+    Media originalLogoImageMedia = _uow.Media.GetMedia(panelSetting.websiteOriginalLogoMediaId);
+}
+
+<div class="sidebar-header">
+    <div class="">
+        @* <img src="@_uow.Media.GetFullFilePathFromMedia(originalLogoImageMedia)" class="logo-icon-2" alt="" /> *@
+    </div>
+    <div>
+        <h4 class="logo-text">@panelSetting.websiteName</h4>
+    </div>
+    <a href="javascript:;" class="toggle-btn ml-auto">
+        <i class="bx bx-menu"></i>
+    </a>
+</div>

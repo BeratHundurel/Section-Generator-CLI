@@ -1,0 +1,20 @@
+﻿@model SectionViewModel
+@inject IUnitOfWork _uow
+@{
+    Media media1 = _uow.Media.GetMedia(Model.paramMediaId1);
+    Media media2 = _uow.Media.GetMedia(Model.paramMediaId2);
+}
+
+<div class="container-fluid pb-80 d-flex justify-content-center">
+    <div class="row gap-3 mens-main">
+        <div class="col-12 col-lg-3 mens-left">
+            <p class="mens-title">@Model.paramText5</p>
+            <p class="mens-desc">@Model.paramText2</p>
+            <p class="mens-con">Continue<span><img src="~/media/arrow-right.png" /></span></p>
+        </div>
+
+        <div class="col-12 col-lg-3 mens-img-div-1 bg-gray"><img src="@media1.Path" /></div>
+
+        <div class="col-12 col-lg-4 mens-img-div bg-darkgray"><img src="@media2.Path" /></div>
+    </div>
+</div>

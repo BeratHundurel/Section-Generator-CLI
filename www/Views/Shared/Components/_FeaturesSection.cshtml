@@ -1,0 +1,37 @@
+﻿@model SectionViewModel
+@inject IUnitOfWork _uow
+@{
+    Media media1 = _uow.Media.GetMedia(Model.paramMediaId1);
+    Media media2 = _uow.Media.GetMedia(Model.paramMediaId2);
+    Media media3 = _uow.Media.GetMedia(Model.paramMediaId3);
+    Media media4 = _uow.Media.GetMedia(Model.paramMediaId4);
+}
+<div class="container-fluid ps-0 pe-0 feature-container pb-80 d-flex justify-content-center">
+    <div class="row justify-content-center align-items-center mr-0 me-0 w-100">
+        <div class="w-100 text-center mgb-2">
+            <h5>@Model.paramText2</h5>
+            <p>@Model.paramText3</p>
+        </div>
+        <div class="col-12 col-lg-6 ps-lg-0">
+            <div class="features-left-img">
+                <img src="@media1.Path" alt="" class="img-fluid object-fit-cover h-100" />
+            </div>
+        </div>
+        <div class="col-12 col-lg-4 d-flex flex-wrap gap-3 pt-3 p-lg-0">
+            <div class="features-box w-45 bg-gray">
+                <img src="@media2.Path" alt="" class="img-fluid object-fit-cover h-100" />
+            </div>
+            <div class="features-box w-45">
+                <h5>@Model.paramText4</h5>
+                <p>@Model.paramText1</p>
+            </div>
+            <div class="features-box w-45 bg-darkgray">
+                <img src="@media3.Path" alt="" class="img-fluid object-fit-cover h-100" />
+
+            </div>
+            <div class="features-box w-50 bg-gray">
+                <img src="@media4.Path" alt="" class="img-fluid object-fit-cover h-100" />
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,39 @@
+﻿@model SectionViewModel
+@inject IUnitOfWork _uow
+
+@{
+	List<ManCategoryProductRelation> mancategoryRelations = _uow.ManCategoryProductRelation.GetAll().Where(p => p.ManCategoryId == Model.ManCategory.Id).ToList();
+	List<Product> products = new List<Product>();
+	foreach (ManCategoryProductRelation s in mancategoryRelations)
+	{
+		Product product = _uow.Product.GetById(Convert.ToInt16(s.ProductId));
+		products.Add(product);
+	}
+}
+<div class="container-fluid breadcrump-section">
+	<div class="container breadcrumb-container pt-5">
+		<div class="d-flex align-items-center mb-2">
+			<a class="breadcrump-links" href="/">Home</a>
+		</div>
+		<p class="breadcrump-title">@Model.ManCategory.Name</p>
+	</div>
+</div>
+
+
+<section class="container donna-section-container px-5">
+	<div class="row">
+		@foreach (var item in products)
+		{
+			var media = _uow.Media.GetMedia(Convert.ToInt32(item.MediaId));
+			Sitemap sitemap = _uow.Sitemap.GetSitemapBySitemapId(Convert.ToInt32(item.SitemapId));
+			string permalink = "";
+			if (sitemap != null)
+				permalink = sitemap.Permalink;
+
+			<div class="col-6 col-lg-5_12 mb-5 px-3 donna-item">
+				<a href="/@permalink"><img src="@media.Path" class="object-fit-contain w-100 donna-img" /></a>
+				<p class="donna-cat-title">@item.Name</p>
+			</div>
+		}
+	</div>
+</section>

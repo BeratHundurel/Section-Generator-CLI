@@ -1,0 +1,255 @@
+﻿@inject IUnitOfWork _uow
+
+@{
+    bool isDeveloper = _uow.Admin.GetRoleByAdmin == "developer";
+}
+
+<!--navigation-->
+<ul class="metismenu" id="menu">
+    <li>
+        <a href="javascript:;" class="has-arrow">
+            <div class="parent-icon icon-color-1">
+                <i class="bx bx-home-alt"></i>
+            </div>
+            <div class="menu-title">Anasayfa</div>
+        </a>
+        <ul>
+            <li>
+                <a asp-controller="home" asp-action="welcome"><i class="bx bx-right-arrow-alt"></i>Hoşgeldiniz</a>
+            </li>
+            <li>
+                <a href="@(Context.Request.Scheme + "://" + Context.Request.Host.Value)" target="_blank"><i class="bx bx-right-arrow-alt"></i>Web Sitem</a>
+            </li>
+        </ul>
+    </li>
+    <li class="menu-label">Genel</li>
+    <li>
+        <a href="javascript:;" class="has-arrow">
+            <div class="parent-icon icon-color-1">
+                <i class="bx bx-user-circle"></i>
+            </div>
+            <div class="menu-title">Yöneticiler</div>
+        </a>
+        <ul>
+            <li>
+                <a asp-controller="admin" asp-action="list"><i class="bx bx-right-arrow-alt"></i>Listele</a>
+            </li>
+            <li>
+                <a asp-controller="admin" asp-action="manage"><i class="bx bx-right-arrow-alt"></i>Ekle</a>
+            </li>
+        </ul>
+    </li>
+    <li>
+        <a href="javascript:;" class="has-arrow">
+            <div class="parent-icon icon-color-1">
+                <i class="bx bx-list-ul"></i>
+            </div>
+            <div class="menu-title">Pagine</div>
+        </a>
+        <ul>
+            <li>
+                <a asp-controller="page" asp-action="list"><i class="bx bx-right-arrow-alt"></i>Elenco</a>
+            </li>
+            <li>
+                <a asp-controller="pagerevision" asp-action="list"><i class="bx bx-right-arrow-alt"></i>Revizyonlar</a>
+            </li>
+            <li>
+                <a asp-controller="page" asp-action="manage"><i class="bx bx-right-arrow-alt"></i>Aggiungi</a>
+            </li>
+        </ul>
+    </li>
+    <li>
+        <a href="javascript:;" class="has-arrow">
+            <div class="parent-icon icon-color-1">
+                <i class="bx bx-barcode"></i>
+            </div>
+            <div class="menu-title">Prodotti</div>
+        </a>
+        <ul>
+            <li>
+                <a asp-controller="product" asp-action="list"><i class="bx bx-right-arrow-alt"></i>Elenco</a>
+            </li>
+            <li>
+                <a asp-controller="product" asp-action="manage"><i class="bx bx-right-arrow-alt"></i>Aggiungi</a>
+            </li>
+        </ul>
+    </li>
+    <li>
+        <a href="javascript:;" class="has-arrow">
+            <div class="parent-icon icon-color-1">
+                <i class="bx bx-paragraph"></i>
+            </div>
+            <div class="menu-title">Categorie</div>
+        </a>
+        <ul>
+            <li>
+                <a asp-controller="category" asp-action="list"><i class="bx bx-right-arrow-alt"></i>Elenco</a>
+            </li>
+            <li>
+                <a asp-controller="category" asp-action="manage"><i class="bx bx-right-arrow-alt"></i>Aggiungi</a>
+            </li>
+        </ul>
+    </li>
+    <li>
+        <a href="javascript:;" class="has-arrow">
+            <div class="parent-icon icon-color-1">
+                <i class="bx bx-paragraph"></i>
+            </div>
+            <div class="menu-title">Man Categories</div>
+        </a>
+        <ul>
+            <li>
+                <a asp-controller="manCategory" asp-action="list"><i class="bx bx-right-arrow-alt"></i>Elenco</a>
+            </li>
+            <li>
+                <a asp-controller="manCategory" asp-action="manage"><i class="bx bx-right-arrow-alt"></i>Aggiungi</a>
+            </li>
+        </ul>
+    </li>
+    <li>
+        <a href="javascript:;" class="has-arrow">
+            <div class="parent-icon icon-color-1">
+                <i class="bx bx-paragraph"></i>
+            </div>
+            <div class="menu-title">Sottocategorie</div>
+        </a>
+        <ul>
+            <li>
+                <a asp-controller="subcategory" asp-action="list"><i class="bx bx-right-arrow-alt"></i>Elenco</a>
+            </li>
+            <li>
+                <a asp-controller="subcategory" asp-action="manage"><i class="bx bx-right-arrow-alt"></i>Aggiungi</a>
+            </li>
+        </ul>
+    </li>
+    <li>
+        <a href="javascript:;" class="has-arrow">
+            <div class="parent-icon icon-color-1">
+                <i class="bx bx-mail-send"></i>
+            </div>
+            <div class="menu-title">Formdan Gelenler</div>
+        </a>
+        <ul>
+            <li>
+                <a asp-controller="contact" asp-action="list"><i class="bx bxs-message-square-edit"></i>Mesajlar</a>
+            </li>
+        </ul>
+    </li>
+    <li>
+        <a href="javascript:;" class="has-arrow">
+            <div class="parent-icon icon-color-1">
+                <i class="bx bx-paragraph"></i>
+            </div>
+            <div class="menu-title">Bloglar</div>
+        </a>
+        <ul>
+            <li>
+                <a asp-controller="blog" asp-action="list"><i class="bx bx-right-arrow-alt"></i>Listele</a>
+            </li>
+            <li>
+                <a asp-controller="blog" asp-action="manage"><i class="bx bx-right-arrow-alt"></i>Ekle</a>
+            </li>
+        </ul>
+    </li>
+    <li>
+        <a asp-controller="menu" asp-action="manage">
+            <div class="parent-icon icon-color-1">
+                <i class="bx bxs-layer"></i>
+            </div>
+            <div class="menu-title">Menu</div>
+        </a>
+    </li>
+    <li>
+        <a asp-controller="setting" asp-action="manage">
+            <div class="parent-icon icon-color-1">
+                <i class="bx bx-cog"></i>
+            </div>
+            <div class="menu-title">Ayarlar</div>
+        </a>
+    </li>
+    @if (isDeveloper)
+    {
+        <li class="menu-label">Geliştiriciler</li>
+        <li>
+            <a asp-controller="setup" asp-action="index">
+                <div class="parent-icon icon-color-1">
+                    <i class="bx bx-cog"></i>
+                </div>
+                <div class="menu-title">Kurulum/Onarım</div>
+            </a>
+        </li>
+        <li>
+            <a href="javascript:;" class="has-arrow">
+                <div class="parent-icon icon-color-1">
+                    <i class="bx bx-globe"></i>
+                </div>
+                <div class="menu-title">Diller</div>
+            </a>
+            <ul>
+                <li>
+                    <a asp-controller="language" asp-action="list"><i class="bx bx-right-arrow-alt"></i>Listele</a>
+                </li>
+                <li>
+                    <a asp-controller="language" asp-action="manage"><i class="bx bx-right-arrow-alt"></i>Ekle</a>
+                </li>
+            </ul>
+        </li>
+        <li>
+            <a href="javascript:;" class="has-arrow">
+                <div class="parent-icon icon-color-1">
+                    <i class="bx bx-grid-alt"></i>
+                </div>
+                <div class="menu-title">Dosya Projeleri</div>
+            </a>
+            <ul>
+                <li>
+                    <a asp-controller="fileproject" asp-action="list"><i class="bx bx-right-arrow-alt"></i>Listele</a>
+                </li>
+                <li>
+                    <a asp-controller="fileproject" asp-action="manage"><i class="bx bx-right-arrow-alt"></i>Ekle</a>
+                </li>
+            </ul>
+        </li>
+        <li>
+            <a href="/admin/theme/index.html">
+                <div class="parent-icon icon-color-1">
+                    <i class="bx bx-chair"></i>
+                </div>
+                <div class="menu-title">Tema</div>
+            </a>
+        </li>
+        <li>
+            <a asp-controller="panelsetting" asp-action="manage">
+                <div class="parent-icon icon-color-1">
+                    <i class="bx bxs-cog"></i>
+                </div>
+                <div class="menu-title">Panel Ayarları</div>
+            </a>
+        </li>
+        <li>
+            <a href="javascript:;" class="has-arrow">
+                <div class="parent-icon icon-color-1">
+                    <i class="bx bx-data"></i>
+                </div>
+                <div class="menu-title">Kayıtlar</div>
+            </a>
+            <ul>
+                <li>
+                    <a asp-controller="AdminAction" asp-action="List"><i class="bx bx-right-arrow-alt"></i>Kullanıcı Aksiyonları</a>
+                </li>
+                <li>
+                    <a asp-controller="AdminLogin" asp-action="List"><i class="bx bx-right-arrow-alt"></i>Kullanıcı Girişleri</a>
+                </li>
+            </ul>
+        </li>
+    }
+    <li>
+        <a href="/admin/home/logout">
+            <div class="parent-icon icon-color-1">
+                <i class="bx bx-exit"></i>
+            </div>
+            <div class="menu-title">Çıkış Yap</div>
+        </a>
+    </li>
+</ul>
+<!--end navigation-->

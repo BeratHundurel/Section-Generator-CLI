@@ -1,0 +1,15 @@
+﻿@model SectionViewModel
+@inject IUnitOfWork _uow
+@{
+
+}
+
+<div class="container-fluid breadcrump-section">
+    <div class="container breadcrumb-container pt-5">
+        <div class="d-flex align-items-center mb-2">
+            <a class="breadcrump-links" href="/">Home</a>
+            <a class="breadcrump-links ms-1" href="@Model.paramText3"> / @Model.paramText2</a>
+        </div>
+        <p class="breadcrump-title">@Model.paramText4</p>
+    </div>
+</div>

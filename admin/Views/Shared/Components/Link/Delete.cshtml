@@ -1,0 +1,8 @@
+﻿@model LinkViewModel
+@{ 
+    string title = Model.Title;
+}
+<a href="javascript:;" class="@Model.ClassName list_delete__btn" data-url="@Model.DataUrl" data-id="@Model.DataId">
+    @title
+    <i class="fadeIn animated bx bx-trash"></i>
+</a>

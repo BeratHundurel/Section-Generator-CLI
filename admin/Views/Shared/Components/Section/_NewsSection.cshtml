@@ -1,0 +1,72 @@
+﻿@model SectionViewModel
+@inject IUnitOfWork _uow
+@{
+    Language language;
+    if (_uow.Cookie.GetUserLanguageId != 0)
+    {
+        language = _uow.Language.GetById(_uow.Cookie.GetUserLanguageId);
+    }
+    else
+    {
+        language = _uow.Language.GetIsRootLang();
+    }
+}
+<input type="hidden" name="sectionName" value="_NewsSection" />
+<input type="hidden" name="order" value="@Model.order" />
+<input type="hidden" name="langId" value="@language.Id" />
+<div class="form-group">
+    <label>Başlık</label>
+    <input type="text" class="form-control" name="title" value="@Model.title" onkeypress="changeTitle(this);" onblur="changeTitle(this);" />
+</div>
+<br />
+@await Component.InvokeAsync("FileUploadModal",
+            new AdminFileUploadViewModel
+        {
+            FileUploadEntity = new FileUploadEntity
+            {
+                FileAccept = "image/jpg, image/png, image/jpeg",
+                Label = "Fotoğraf",
+                FileId = 1,
+                FileType = "image",
+                MediaId = Model.paramMediaId1.ToString()
+            },
+            AdminFileUploadModal = new AdminFileUploadModal
+            {
+                ModalTitle = "First New Photo",
+            }
+        })
+<br />
+@await Component.InvokeAsync("FileUploadModal",
+            new AdminFileUploadViewModel
+        {
+            FileUploadEntity = new FileUploadEntity
+            {
+                FileAccept = "image/jpg, image/png, image/jpeg",
+                Label = "Fotoğraf",
+                FileId = 2,
+                FileType = "image",
+                MediaId = Model.paramMediaId2.ToString()
+            },
+            AdminFileUploadModal = new AdminFileUploadModal
+            {
+                    ModalTitle = "Second New Photo",
+            }
+        })
+<br />
+@await Component.InvokeAsync("FileUploadModal",
+            new AdminFileUploadViewModel
+        {
+            FileUploadEntity = new FileUploadEntity
+            {
+                FileAccept = "image/jpg, image/png, image/jpeg",
+                Label = "Fotoğraf",
+                FileId = 3,
+                FileType = "image",
+                MediaId = Model.paramMediaId3.ToString()
+            },
+            AdminFileUploadModal = new AdminFileUploadModal
+            {
+                    ModalTitle = "Third New Photo",
+            }
+        })
+<br />

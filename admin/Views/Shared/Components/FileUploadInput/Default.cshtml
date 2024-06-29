@@ -1,0 +1,158 @@
+﻿@model FileUploadEntity
+@inject IUnitOfWork _uow
+
+@{
+    string mediaId = Model.MediaId == null ? null : Model.MediaId.ToString();
+    var media = _uow.Media.GetMedia(Convert.ToInt32(mediaId));
+    var language = _uow.Language.GetById(_uow.Cookie.GetAdminLangId);
+
+    string fullSrc = null;
+    string ft = Model.FileType;
+    string label = Model.Label == null ? "Fotoğraf" : Model.Label;
+    string placeholder = Model.Placeholder == null ? "Yükleyin" : Model.Placeholder;
+
+    string paramMediaIdName = Model.ParamMediaIdName == null ? "paramMediaId" + Model.FileId : Model.ParamMediaIdName;
+    string paramMediaIdValue = mediaId;// Full filename with path
+
+    string paramMediaFullPathName = Model.ParamMediaFullPathName == null ? "paramMediaFullPath" + Model.FileId : Model.ParamMediaFullPathName;
+
+    string filePathLang = null;
+    if (Model.IsThereLanguageFolder != false)
+    {
+        filePathLang = language == null ? "/" : "/" + _uow.Media.NameToSlug(language.Title);
+    }
+
+    string filePath = "/uploads" + filePathLang + (Model.FilePath == null ? "/" : Model.FilePath);
+
+    bool image = Model.FileType == "image" ? true : false;
+    bool video = Model.FileType == "video" ? true : false;
+    bool file = Model.FileType == "file" ? true : false;
+
+    var mediaTitleTag = Model.MediaTitle;
+    var mediaAltTag = Model.MediaTitle;
+    var mediaWidth = Model.MediaWidth;
+    var mediaHeight = Model.MediaHeight;
+}
+<div class="file_upload__box px-5">
+    <input type="hidden" class="file_upload__mediaid" name="@paramMediaIdName" value="@paramMediaIdValue" />
+    <input type="hidden" name="mediaIdStrings" />
+    @if (Model.FileProjectId != null)
+    {
+        <input type="hidden" name="fileProjectId" value="@Model.FileProjectId" />
+    }
+    <div class="file_upload__form" style="display:none;">
+        <div class="page_overlay overlay" style="display:none;">
+            <i class="fas fa-2x fa-sync fa-spin"></i> Tamamlanıyor
+        </div>
+        <div class="row">
+            <div class="col-sm-12 form-group">
+                <div class="alert alert-warning">
+                    Eklediğiniz dosya, fotoğraf ya da videolar, <b>silip tekrardan farklı olarak eklediğiniz</b> halde aynı görünüyorsa kullanmış olduğunuz tarayıcı
+                    dosyayı önbelleğine almış olabilir. Alt taraftaki yazı değişiyorsa sorunsuz şekilde dosyanızı yüklemişsiniz demektir.
+                </div>
+                @if (video)
+                {
+                    <div class="alert alert-info">
+                        Sadece <b>MP4</b> formatında video ekleyebilirsiniz.
+                    </div>
+                }
+                @if (file)
+                {
+                    <div class="alert alert-info">
+                        Sadece <b>PDF</b> dosyası ekleyebilirsiniz.
+                    </div>
+                }
+            </div>
+            <div class="col-sm-12 form-group">
+                <a class="btn btn-primary btn-block" data-toggle="collapse" href="#media_collapse__general" role="button" aria-expanded="false" aria-controls="media_collapse__general">
+                    Genel Özellikler
+                    <i class="bx bx-down-arrow"></i>
+                </a>
+            </div>
+            <div class="collapse col-sm-12" id="media_collapse__general">
+                <div class="col-sm-12 form-group">
+                    <label>Dosya Başlığı</label>
+                    <input class="form-control" type="text" name="fileText" value="@Model.MediaTitle" placeholder="Dosya ismi belirtiniz." />
+                </div>
+                <div class="col-sm-12 form-group">
+                    <label>Dosya Açıklaması</label>
+                    <textarea class="form-control" rows="3" name="mediaDescription" value="@Model.MediaTitle" placeholder="Dosya açıklaması belirtebilirsiniz."></textarea>
+                </div>
+                <div class="col-sm-12 form-group d-none">
+                    <label>Dosya Yolu</label>
+                    <input class="form-control" type="text" name="filePath" placeholder="Dosya yolu" value="@filePath" disabled />
+                </div>
+            </div>
+
+            @if (image)
+            {
+                <div class="col-sm-12">
+                    <a class="btn btn-primary btn-block" data-toggle="collapse" href="#media_collapse__image" role="button" aria-expanded="false" aria-controls="media_collapse__image">
+                        Ek Özellikleri Düzenleyin
+                        <i class="bx bx-down-arrow"></i>
+                    </a>
+                </div>
+                <div class="collapse col-sm-12" id="media_collapse__image">
+                    <div class="card-body row">
+                        <div class="col-md-6 col-sm-12 form-group">
+                            <input class="form-control" type="number" name="imageWidth" value="@mediaWidth" placeholder="Fotoğraf genişliği belirtebilirsiniz." />
+                        </div>
+                        <div class="col-md-6 col-sm-12 form-group">
+                            <input class="form-control" type="number" name="imageHeight" value="@mediaHeight" placeholder="Fotoğraf yüksekliği belirtebilirsiniz." />
+                        </div>
+                        <div class="col-md-6 col-sm-12 form-group">
+                            <label>Kalite Belirleyin</label>
+                            <div class="slider-blue">
+                                <input name="imageQuality" type="text" value="" class="quality_slider form-control" data-slider-min="60" data-slider-max="90"
+                                       data-slider-orientation="horizontal"
+                                       data-slider-selection="before" data-slider-tooltip="show">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+            <div class="col-sm-12 mt-3">
+                <div class="input-group">
+                    <div class="custom-file">
+                        <input class="custom-file-input" type="file" name="fileUpload"
+                               data-id="@Model.FileId" accept="@Model.FileAccept">
+                        <label class="custom-file-label" for="inputGroupFile04">Dosya Seçin ve Yükleyin</label>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <div class="file_upload__content">
+        @if (media != null)
+        {
+            <div class="file_upload__item file_@Model.FileId">
+                <a href="javascript:;" data-mediaid="@mediaId" data-id="@Model.FileId" class="bg-danger text-white btn btn-icon btn_remove__file">                    <i class="fa fa-times"></i></a>
+                @if (ft.Contains("image"))
+                {
+                    <img class="mw-100" src="@media.Path">
+                }
+                else if (ft.Contains("video"))
+                {
+                    <video class='mw-100' controls>
+                        <source src="@fullSrc" />
+                    </video>
+                }
+                else
+                {
+                    <p>Normal Dosya</p>
+                }
+                <div class="file_content__info my-2">
+                    <ul class="list-group">
+                        <li class="list-group-item active">Dosya Adı: <b>@media.Title</b></li>
+                        <li class="list-group-item">Dosya url: <a class="text-muted" rel="noreferrer" target="_blank" href="@media.Path">@media.Path</a></li>
+                        <li class="list-group-item">Dosya yolu: <b>@media.Path</b></li>
+                        <li class="list-group-item">Yüklenme Tarihi: <b>@media.Date.ToShortDateString()</b></li>
+                        <li class="list-group-item disabled">Dosya Türü: <b>@media.Type</b></li>
+                        <li class="list-group-item disabled">Dosya Tipi: <b>@media.Extension</b></li>
+                    </ul>
+                </div>
+            </div>
+        }
+    </div>
+</div>

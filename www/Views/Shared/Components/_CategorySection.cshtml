@@ -1,0 +1,39 @@
+﻿@model SectionViewModel
+@inject IUnitOfWork _uow
+
+@{
+    Media media1 = _uow.Media.GetMedia(Model.paramMediaId1);
+    Media media2 = _uow.Media.GetMedia(Model.paramMediaId2);
+    Media media3 = _uow.Media.GetMedia(Model.paramMediaId3);
+}
+
+<div class="banner-area pb-60 pt-3 pt-lg-0">
+    <div class="container d-flex justify-content-center">
+        <div class="row w-100">
+            <div class="col-lg-4 col-md-4 mb-75 col-12">
+                <div class="single-banner">
+                    <a href="/@Model.paramText2"><img src="@media1.Path" /></a>
+                    <div class="banner-content">
+                        <h3 class="banner-title">@Model.paramText1</h3>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4 col-md-4 mb-75 col-12">
+                <div class="single-banner">
+                    <a href=" /@Model.paramText4"><img src="@media2.Path" /></a>
+                    <div class="banner-content">
+                        <h3 class="banner-title">@Model.paramText3</h3>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4 col-md-4 mb-75 col-12">
+                <div class="single-banner">
+                    <a href="/@Model.paramText6"><img src="@media3.Path" /></a>
+                    <div class="banner-content">
+                        <h3 class="banner-title">@Model.paramText5</h3>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

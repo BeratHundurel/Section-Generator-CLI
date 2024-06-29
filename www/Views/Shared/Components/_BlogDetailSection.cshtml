@@ -1,0 +1,49 @@
+﻿@model SectionViewModel
+@inject IUnitOfWork _uow
+
+@{
+    List<Blog> blogs = _uow.Blog.GetAll().Where(b => b.Enabled == true).ToList();
+    var media2 = _uow.Media.GetMedia(Convert.ToInt32(Model.Blog.MediaId));
+
+    List<Blog> newBlogList = new List<Blog>();
+
+    if (blogs.Count > 3)
+    {
+        Random rnd = new Random();
+        int random1 = rnd.Next(blogs.Count);
+        newBlogList.Add(blogs[random1]);
+        blogs.Remove(blogs[random1]);
+
+        int random2 = rnd.Next(blogs.Count);
+        newBlogList.Add(blogs[random2]);
+        blogs.Remove(blogs[random2]);
+
+        int random3 = rnd.Next(blogs.Count);
+        newBlogList.Add(blogs[random3]);
+        blogs.Remove(blogs[random3]);
+    }
+}
+<div class="container-fluid breadcrump-section">
+    <div class="container breadcrumb-container pt-5">
+        <div class="d-flex align-items-center mb-2">
+            <a class="breadcrump-links" href="/">Home</a>
+            <p class="breadcrump-links">/Blog</p>
+        </div>
+        <p class="breadcrump-title">@Model.Blog.Title</p>
+    </div>
+</div>
+
+<div class="container blog-detail-container d-flex justify-content-center align-items-center">
+    <div class="project-detail-inside">
+
+        <div class="project-detail-inside-left">
+            <p class="project-detail-title mt-0 mb-5">
+                @Model.Blog.Title
+            </p>
+            <div class="project-detail-inside-left-img d-flex justify-content-center">
+                <img src="@media2.Path" class="project-detail-img" />
+            </div>
+            <p class="blog-detail-desc">@Html.Raw(Model.Blog.Description)</p>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,31 @@
+﻿@model PageViewModel
+@inject IUnitOfWork _uow
+@{
+    ViewData["Title"] = Model.Page.SeoTitle;
+    ViewData["Description"] = Model.Page.SeoDescription;
+}
+<input type="hidden" value="@Model.LangId" id="langId" />
+
+@if (Model.Page.IsRoot == true)
+{
+    <partial name="_Slider" model="Model.Slides" />
+}
+
+@foreach (var item in Model.Sections)
+{
+    item.LangId = Model.LangId;
+    item.Blog = Model.Blog;
+    item.Service = Model.Service;
+    item.Category = Model.Category;
+    item.SubCategory = Model.SubCategory;
+    item.Product = Model.Product;
+    item.ManCategory = Model.ManCategory;
+
+    string sectionName = "~/Views/Shared/Components/" + item.sectionName + ".cshtml";
+    <partial name="@sectionName" model="item" />
+}
+
+
+
+
+

@@ -1,0 +1,38 @@
+﻿@model AdminSetting
+<div class="switcher-wrapper">
+    <div class="switcher-btn">
+        <i class='bx bx-cog bx-spin'></i>
+    </div>
+    <div class="switcher-body">
+        <form asp-controller="admin" asp-action="SetPanelSetting" method="post">
+            <h5 class="mb-0 text-uppercase">Theme Ayarları</h5>
+            <hr />
+            <h6 class="mb-0">Theme Tasarımı</h6>
+            <hr />
+            <div class="d-flex align-items-center justify-content-between">
+                <div class="custom-control custom-radio">
+                    <input type="checkbox" id="darkmode" asp-for="darkMode" class="custom-control-input">
+                    <label class="custom-control-label" for="darkmode">Dark Mode</label>
+                </div>
+            </div>
+            <hr />
+            <div class="custom-control custom-switch">
+                <input type="checkbox" class="custom-control-input" asp-for="darkSidebar" id="DarkSidebar">
+                <label class="custom-control-label" for="DarkSidebar">Dark Sidebar</label>
+            </div>
+            <hr />
+            <div class="custom-control custom-switch">
+                <input type="checkbox" class="custom-control-input" asp-for="colorLessSidebar" id="ColorLessIcons">
+                <label class="custom-control-label" for="ColorLessIcons">Color Less Icons</label>
+            </div>
+            <div class="custom-control custom-switch">
+                <input type="checkbox" class="custom-control-input" asp-for="WrapperToggled" id="WrapperToggled">
+                <label class="custom-control-label" for="WrapperToggled">Sol menüyü daralt!</label>
+            </div>
+            <div class="form-group mt-2">
+                <input type="submit" class="btn btn-outline-info" value="Kaydet" />
+
+            </div>
+        </form>
+    </div>
+</div>

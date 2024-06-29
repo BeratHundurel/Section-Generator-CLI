@@ -1,0 +1,75 @@
+﻿@model SubCategory
+@inject IUnitOfWork _uow
+@{
+    var category = _uow.Category.GetAll(_uow.Cookie.GetAdminLangId);
+
+}
+@section libScript {
+    <script src='https://cdn.tiny.cloud/1/vdqx2klew412up5bcbpwivg1th6nrh3murc6maz8bukgos4v/tinymce/5/tinymce.min.js' referrerpolicy="origin">
+    </script>
+    <script>
+        tinymce.init({
+            selector: '#mytextarea'
+        });
+    </script>
+}
+<div class="card radius-15">
+    <div class="card-body">
+        <div class="card-title">
+            <h4 class="mb-0">Aggiungere una sottocategoria</h4>
+        </div>
+        <hr />
+        <form class="needs-validation" method="post" novalidate>
+            <input type="hidden" asp-for="Id" />
+            <input type="hidden" class="mediaIdForCategory" asp-for="MediaId" />
+            <input type="hidden" asp-for="SitemapId" />
+            <div class="row">
+                <div class="col-md-12 col-sm-12 form-group">
+                    <label asp-for="Name">Inserire il nome della sottocategoria</label>
+                    <input type="text" asp-for="Name" maxlength="256" class="form-control" placeholder="Kategori Adı" required>
+                    <div class="invalid-feedback">
+                        Inserire il nome della sottocategoria
+                    </div>
+                    <div class="col-md-12 col-sm-12 pl-0 form-group">
+                        <label>Selezionare la categoria</label>
+                        <select name="CategoryId" class="form-control chosen-select">
+                            @foreach (var item in category)
+                            {
+                                if (Model.CategoryId == item.Id)
+                                {
+                                    <option value="@item.Id" selected>@item.Name</option>
+                                }
+                                else
+                                {
+                                    <option value="@item.Id">@item.Name</option>
+                                }
+                            }
+                        </select>
+                    </div>
+                    <div class="col-sm-12 form-group">
+                        <label>Aggiungi foto di sottocategoria</label>
+                    </div>
+                    <div class="col-md-12 col-sm-12 form-group">
+                        @await Component.InvokeAsync("FileUploadModal",
+                                 new AdminFileUploadViewModel
+                        {
+                            FileUploadEntity = new FileUploadEntity
+                            {
+                                FileAccept = "image/jpg, image/png, image/jpeg",
+                                Label = "Fotoğraf",
+                                FileId = 1,
+                                FileType = "image",
+                                MediaId = Model.MediaId ==  null ? null : Model.MediaId.ToString(),
+                            },
+                            AdminFileUploadModal = new AdminFileUploadModal
+                            {
+                        ModalTitle = "Aggiungi foto di sottocategoria",
+                            }
+                        })
+                    </div>
+            </div>
+            @await Component.InvokeAsync("ButtonGroup", new { viewName = "Default", vm = new ButtonGroupViewModel { ListControllerName = ViewContext.RouteData.Values["controller"].ToString() } })
+        </form>
+    </div>
+</div>
+

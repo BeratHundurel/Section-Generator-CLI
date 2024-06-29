@@ -1,0 +1,81 @@
+﻿@model FileUploadEntity
+@inject IUnitOfWork _uow
+
+@{
+    string mediaId = Model.MediaId == null ? null : Model.MediaId.ToString();
+    var media = _uow.Media.GetMedia(Convert.ToInt32(mediaId));
+    var language = _uow.Language.GetById(_uow.Cookie.GetAdminLangId);
+    //var website = _uow.WebSite.GetById(_uow.Cookie.GetAdminWebSiteId);
+    string ft = Model.FileType;
+    //string filePathWebsite = website == null ? "/" : "/" + _uow.Media.NameToSlug(website.SiteName);
+    string filePathLang = null;
+    if (Model.IsThereLanguageFolder != false)
+    {
+        filePathLang = language == null ? "/" : "/" + _uow.Media.NameToSlug(language.Title);
+    }
+
+    string filePath = "/uploads" + filePathLang + (Model.FilePath == null ? "/" : Model.FilePath);
+
+    bool image = Model.FileType == "image" ? true : false;
+    bool video = Model.FileType == "video" ? true : false;
+    bool file = Model.FileType == "file" ? true : false;
+
+    var fileTitle = Model.MediaTitle;
+    var mediaWidth = Model.MediaWidth;
+    var mediaHeight = Model.MediaHeight;
+    var mediaQuality = Model.MediaQuality == 0 ? 70 : Model.MediaQuality;
+}
+
+<div class="simple_file__upload___inclusive">
+    <label class="ml-2 font-weight-bold">@Model.Label</label>
+    <input type="hidden" class="simple_file__upload_media_id" name="@Model.ParamMediaIdName" value="@Model.MediaId" />
+    <input type="text" class="form-control my-3" placeholder="Lütfen dosya için başlık giriniz." name="fileTitle" value="@fileTitle" style="display:none;" />
+    <input type="hidden" name="filePath" value="@filePath" />
+    <input type="hidden" name="imageWidth" value="@mediaWidth" />
+    <input type="hidden" name="imageHeight" value="@mediaHeight" />
+    <input type="hidden" name="imageQuality" value="@mediaQuality">
+    <div class="input-group input_group_simple__upload">
+        <div class="input_group_simple__upload__overlay" style="display:none;">
+            <div class="spinner-border text-primary" role="status">
+                <span class="sr-only">Loading...</span>
+            </div>
+            <span class="ml-3">Yükleniyor. Lütfen bekleyiniz.</span>
+        </div>
+        <div class="custom-file">
+            <input class="custom-file-input simple_file__upload___input" type="file" id="validatedInputGroupCustomFile_@Model.FileId" name="fileUploadSimple"
+                   data-id="@Model.FileId" accept="@Model.FileAccept">
+            <label class="custom-file-label" for="validatedInputGroupCustomFile_@Model.FileId">Dosya Seçin</label>
+        </div>
+    </div>
+    <div class="simple_file_upload__content mt-3">
+        @if (media != null)
+        {
+            <div class="simple_file_upload__item row file_@Model.FileId">
+                <div class="col-md-6">
+                    <a href="javascript:;" data-mediaid="@mediaId" data-id="@Model.FileId" class="bg-danger text-white btn btn-icon btn_remove_simple_uploaded_file">                    <i class="fa fa-times"></i></a>
+                    @if (ft.Contains("image"))
+                    {
+                        <img class="mw-100 w-100" src="@media.Path">
+                    }
+                    else
+                    {
+                        <p>Normal Dosya</p>
+                    }
+                </div>
+                <div class="file_content__info col-md-6">
+                    <ul class="list-group">
+                        <li class="list-group-item active">Dosya Adı: <b>@media.Title</b></li>
+                        <li class="list-group-item">Dosya url: <a class="text-muted" rel="noreferrer" target="_blank" href="@media.Path">@media.Path</a></li>
+                        <li class="list-group-item">Dosya yolu: <b>@media.Path</b></li>
+                        <li class="list-group-item">Yüklenme Tarihi: <b>@media.Date.ToShortDateString()</b></li>
+                        <li class="list-group-item disabled">Dosya Türü: <b>@media.Type</b></li>
+                    </ul>
+                </div>
+            </div>
+        }
+    </div>
+    <div class="invalid-feedback">
+        Lütfen bir dosya seçiniz.
+    </div>
+</div>
+

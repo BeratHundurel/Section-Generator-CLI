@@ -1,0 +1,105 @@
+﻿@model SectionViewModel
+@inject IUnitOfWork _uow
+@{
+    Language language;
+    if (_uow.Cookie.GetUserLanguageId != 0)
+    {
+        language = _uow.Language.GetById(_uow.Cookie.GetUserLanguageId);
+    }
+    else
+    {
+        language = _uow.Language.GetIsRootLang();
+    }
+}
+<input type="hidden" name="sectionName" value="_FeaturesSection" />
+<input type="hidden" name="order" value="@Model.order" />
+<input type="hidden" name="langId" value="@language.Id" />
+<div class="form-group">
+    <label>Başlık</label>
+    <input type="text" class="form-control" name="title" value="@Model.title" />
+</div>
+<div class="form-group">
+    <label>Feature Title</label>
+    <input type="text" class="form-control" name="paramText2" value="@Model.paramText2" />
+</div>
+<div class="form-group">
+    <label>Feature Description</label>
+    <input type="text" class="form-control" name="paramText3" value="@Model.paramText3" />
+</div>
+<div class="form-group">
+    <label>Feature Right Title</label>
+    <input type="text" class="form-control" name="paramText4" value="@Model.paramText4" />
+</div>
+
+<div class="form-group">
+    <label>Feature Text</label>
+    <input type="text" class="form-control" name="paramText1" value="@Model.paramText1" />
+</div>
+
+@await Component.InvokeAsync("FileUploadModal",
+                    new AdminFileUploadViewModel
+                    {
+                        FileUploadEntity = new FileUploadEntity
+                        {
+                            FileAccept = "image/jpg, image/png, image/jpeg",
+                            Label = "Fotoğraf",
+                            FileId = 1,
+                            FileType = "image",
+                            MediaId = Model.paramMediaId1.ToString()
+                        },
+                        AdminFileUploadModal = new AdminFileUploadModal
+                        {
+                            ModalTitle = "Left Photo",
+                        }
+                    })
+<br />
+@await Component.InvokeAsync("FileUploadModal",
+                        new AdminFileUploadViewModel
+                    {
+                        FileUploadEntity = new FileUploadEntity
+                        {
+                            FileAccept = "image/jpg, image/png, image/jpeg",
+                            Label = "Fotoğraf",
+                            FileId = 2,
+                            FileType = "image",
+                            MediaId = Model.paramMediaId2.ToString()
+                        },
+                        AdminFileUploadModal = new AdminFileUploadModal
+                        {
+                            ModalTitle = "Right Photo 1",
+                        }
+                    })
+<br />
+@await Component.InvokeAsync("FileUploadModal",
+                        new AdminFileUploadViewModel
+                    {
+                        FileUploadEntity = new FileUploadEntity
+                        {
+                            FileAccept = "image/jpg, image/png, image/jpeg",
+                            Label = "Fotoğraf",
+                            FileId = 3,
+                            FileType = "image",
+                            MediaId = Model.paramMediaId3.ToString()
+                        },
+                        AdminFileUploadModal = new AdminFileUploadModal
+                        {
+                            ModalTitle = "Right Photo 2",
+                        }
+                    })
+<br />
+@await Component.InvokeAsync("FileUploadModal",
+                        new AdminFileUploadViewModel
+                    {
+                        FileUploadEntity = new FileUploadEntity
+                        {
+                            FileAccept = "image/jpg, image/png, image/jpeg",
+                            Label = "Fotoğraf",
+                            FileId = 4,
+                            FileType = "image",
+                            MediaId = Model.paramMediaId4.ToString()
+                        },
+                        AdminFileUploadModal = new AdminFileUploadModal
+                        {
+                            ModalTitle = "Right Photo 3",
+                        }
+                    })

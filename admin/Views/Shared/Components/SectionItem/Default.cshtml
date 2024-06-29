@@ -1,0 +1,22 @@
+﻿@model SectionItemViewModel
+
+<div class="card section_item mb-2">
+    <div class="card-header section_item__header d-flex justify-content-between">
+        <div class="action_left">
+            <a href="javascript:;" class="btn btn-sm btn-light"><i class="lni lni-shuffle"></i></a>
+        </div>
+        <button class="btn btn-link collapse_button" type="button" data-toggle="collapse">
+            <span class="collapse_button_span">@(Model.SVM == null ? Model.SectionName : Model.SVM.title)</span>  
+        </button>
+        <div class="actions">
+            <a href="javascript:;" class="btn btn-sm btn-light collapse_button"><i class="bx bx-chevron-down"></i></a>
+            <a class="btn btn-sm btn-danger section_item_remove"><i class="bx bx-trash"></i></a>
+        </div>
+    </div>
+
+    <div class="section_item__content collapse @(Model.IsCollapsed != true ? "show" : "")">
+        <div class="card-body">
+            @await Component.InvokeAsync("Section", Model)
+        </div>
+    </div>
+</div>

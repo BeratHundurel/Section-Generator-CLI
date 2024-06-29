@@ -1,0 +1,49 @@
+﻿@model SectionViewModel
+@inject IUnitOfWork _uow
+@{
+    Language language;
+    if (_uow.Cookie.GetUserLanguageId != 0)
+    {
+        language = _uow.Language.GetById(_uow.Cookie.GetUserLanguageId);
+    }
+    else
+    {
+        language = _uow.Language.GetIsRootLang();
+    }
+}
+<input type="hidden" name="sectionName" value="_AboutSection" />
+<input type="hidden" name="order" value="@Model.order" />
+<input type="hidden" name="langId" value="@language.Id" />
+
+<div class="form-group">
+    <label>Başlık</label>
+    <input type="text" class="form-control" name="title" value="@Model.title" onkeypress="changeTitle(this);" onblur="changeTitle(this);" />
+</div>
+<br />
+<div class="form-group">
+    <label>Hakkımızda Başlık</label>
+    <input type="text" class="form-control" name="paramText2" rows="4" value="@Model.paramText2" />
+</div>
+<br />
+<div class="form-group">
+    <label>Hakkımızda paragraph</label>
+    <input type="text" class="form-control" name="paramText1" rows="4" value="@Model.paramText1" />
+</div>
+<br />
+@await Component.InvokeAsync("FileUploadModal",
+                new AdminFileUploadViewModel
+            {
+                FileUploadEntity = new FileUploadEntity
+                {
+                    FileAccept = "image/jpg, image/png, image/jpeg",
+                    Label = "Fotoğraf",
+                    FileId = 1,
+                    FileType = "image",
+                    MediaId = Model.paramMediaId1.ToString()
+                },
+                AdminFileUploadModal = new AdminFileUploadModal
+                {
+                    ModalTitle = "Hakkımızda Foroğraf Alanı",
+                }
+            })
+<br />

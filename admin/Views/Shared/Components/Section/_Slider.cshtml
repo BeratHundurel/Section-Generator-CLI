@@ -1,0 +1,107 @@
+﻿@model Slide
+@inject IUnitOfWork _uow
+@{
+    Language language;
+    if (_uow.Cookie.GetUserLanguageId != 0)
+    {
+        language = _uow.Language.GetById(_uow.Cookie.GetUserLanguageId);
+    }
+    else
+    {
+        language = _uow.Language.GetIsRootLang();
+    }
+}
+<input type="hidden" name="sectionName" value="_Slider" />
+<input type="hidden" name="order" value="@Model.order" />
+<input type="hidden" name="langId" value="@language.Id" />
+
+<div class="form-group">
+    <label>
+        Slider İsim
+    </label>
+    <input type="text" class="form-control" name="sliderTitle" value="@Model.sliderTitle" onkeypress="changeTitle(this);" onblur="changeTitle(this);" />
+</div>
+<div class="form-group">
+    <label class="control-label ">
+        Başlık
+    </label>
+    <input type="text" class="form-control" name="sliderSubTitle" value="@Model.sliderSubTitle" />
+</div>
+<div class="form-group">
+    <label class="control-label ">
+        Second Title
+    </label>
+    <input type="text" class="form-control" name="sliderDescription" value="@Model.sliderDescription" />
+</div>
+<div class="accordion" id="slider_accordion">
+    <div class="card">
+        <button class="btn btn-sm btn-danger collapsed" type="button" data-toggle="collapse" data-target="#slider_collapse_link" aria-expanded="true" aria-controls="slider_collapse_link">
+            Slayt Linkleri
+        </button>
+        <div id="slider_collapse_link" class="collapse" aria-labelledby="slider_heading_link" data-parent="#slider_accordion">
+            <div class="card-body">
+                <div class="form-group">
+                    <label class="control-label ">
+                        Link 1 Başlık
+                    </label>
+                    <input type="text" class="form-control" name="sliderButtonText1" value="@Model.sliderButtonText1" />
+                </div>
+                <div class="form-group">
+                    <label class="control-label ">
+                        Link 1
+                    </label>
+                    <input class="form-control" type="text" name="sliderButtonLink1" value="@Model.sliderButtonLink1" />
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="card">
+        <button class="btn btn-sm btn-danger collapsed" type="button" data-toggle="collapse" data-target="#slider_collapse_media" aria-expanded="true" aria-controls="slider_collapse_media">
+            Slayt Fotoğraf ve Videosu
+        </button>
+        <div id="slider_collapse_media" class="collapse" aria-labelledby="slider_heading_media" data-parent="#slider_accordion">
+            <div class="card-body">
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col-md-12 col-sm-12">
+                            @await Component.InvokeAsync("FileUploadModal",
+                                     new AdminFileUploadViewModel
+                            {
+                                FileUploadEntity = new FileUploadEntity
+                                {
+                                    FileAccept = "image/*",
+                                    Label = "Header Fotoğrafı",
+                                    FileId = 1,
+                                    FileType = "image",
+                                    MediaId = Model.paramMediaId1.ToString(),
+                                },
+                                AdminFileUploadModal = new AdminFileUploadModal
+                                {
+                                    ModalTitle = "Fotoğraf Yükleyin",
+                                }
+                            })
+                        </div>
+                        <div class="col-md-12 col-sm-12">
+                            @await Component.InvokeAsync("FileUploadModal",
+                                     new AdminFileUploadViewModel
+                            {
+                                FileUploadEntity = new FileUploadEntity
+                                {
+                                    FileAccept = "image/*",
+                                    Label = "Header Fotoğrafı",
+                                    FileId = 2,
+                                    FileType = "image",
+                                    MediaId = Model.paramMediaId2.ToString(),
+                                },
+                                AdminFileUploadModal = new AdminFileUploadModal
+                                {
+                                    ModalTitle = "Mobil Fotoğraf Yükleyin",
+                                }
+                            })
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

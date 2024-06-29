@@ -1,0 +1,109 @@
+﻿@model SectionViewModel
+@inject IUnitOfWork _uow
+
+@{
+    var relatedProductsQuery = _uow.Product.GetAll();
+    var productImages = _uow.ProductImage.GetListProductImages(Model.Product.Id);
+    var productImaage = _uow.Media.GetById(Model.Product.MediaId);
+    string categoryName = "";
+    var category = _uow.Category.GetById(Convert.ToInt32(Model.Product.CategoryId));
+    if (category != null)
+    {
+        categoryName = category.Name;
+    }
+    var subCategoryName = _uow.SubCategory.GetById(Convert.ToInt32(Model.Product.SubCategoryId))?.Name;
+    var manCategoryName = _uow.ManCategory.GetById(Convert.ToInt32(Model.Product.ManCategoryId))?.Name;
+
+    string catName;
+    if (!string.IsNullOrEmpty(categoryName))
+    {
+        catName = categoryName;
+    }
+    else
+    {
+        catName = manCategoryName ?? ""; // Eğer manCategoryName de null ise boş bir dize ata
+        subCategoryName = "";
+    }
+
+    if (Model.Product.ManCategoryId != 0)
+    {
+        relatedProductsQuery = relatedProductsQuery.Where(x => x.CategoryId == Model.Product.ManCategoryId);
+    }
+    else
+    {
+        relatedProductsQuery = relatedProductsQuery.Where(x => x.CategoryId == Model.Product.CategoryId);
+    }
+
+    var relatedProducts = relatedProductsQuery
+        .Where(x => x.Id != Model.Product.Id)
+        .OrderBy(x => Guid.NewGuid())
+        .Take(5)
+        .ToList();
+
+    Language language;
+    if (_uow.Cookie.GetUserLanguageId != 0)
+    {
+        language = _uow.Language.GetById(_uow.Cookie.GetUserLanguageId);
+    }
+    else
+    {
+        language = _uow.Language.GetIsRootLang();
+    }
+
+    // var relatedProducts = _uow.Product.GetAll().Where(x => x.CategoryId == Model.Product.CategoryId && x.Id != Model.Product.Id).OrderBy(x => Guid.NewGuid()).Take(5).ToList();
+}
+<link href="~/css/productdetail.css" rel="stylesheet" />
+<section class="container product-detail-container mt-70 mb-70 px-lg-5">
+    <div class="row mb-90">
+        <div class="col-lg-6 col-12 px-3">
+            <div class="row flex-column-reverse flex-lg-row mb-4 mb-lg-0">
+                <div class="col-lg-3 col-12 d-flex d-lg-block">
+                    @foreach (var image in productImages)
+                    {
+                        var media = _uow.Media.GetById(image.MediaId);
+                        <div class="product-detail-img-list my-2 me-lg-0 me-3">
+                            <img class="w-100 object-fit-contain h-100" src="@media.Path" />
+                        </div>
+                    }
+                </div>
+                <div class="col-lg-9 col-12 mb-3 mb-lg-0">
+                    <div class="product-detail-img-box">
+                        <img class="w-100 object-fit-contain h-100" src="@productImaage.Path" />
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-6 col-12 px-lg-3">
+            <h1>
+                @Model.Product.Name
+            </h1>
+            <p><strong>SKU: </strong>@Model.Product.Name</p>
+            <p><strong>CATEGORY: </strong>@(catName + " " + subCategoryName)</p>
+        </div>
+    </div>
+    <div class="row related-products-container">
+        @if (language.Title == "en-EN")
+        {
+            <h4>Related Products</h4>
+        }
+        else
+        {
+            <h4>Prodotti Collegati</h4>
+        }
+        @foreach (var product in relatedProducts)
+        {
+            var media = _uow.Media.GetById(product.MediaId);
+            Sitemap sitemap = _uow.Sitemap.GetSitemapBySitemapId(Convert.ToInt32(product.SitemapId));
+            string permalink = "";
+            if (sitemap != null)
+                permalink = sitemap.Permalink;
+
+            <div class="col-lg-5_12 col-6 related-product-box text-center px-3">
+                <a href="@permalink">
+                    <img class="w-100 object-fit-contain" src="@media.Path" />
+                </a>
+                <h3>@product.Name</h3>
+            </div>
+        }
+    </div>
+</section>

@@ -1,0 +1,61 @@
+﻿@model PageRevision
+@inject IUnitOfWork _uow
+@{
+    var page = _uow.Page.GetById(Convert.ToInt32(Model.PageId));
+    var sitemap = page != null ? _uow.Sitemap.GetById(Convert.ToInt32(page.SitemapId)) : null;
+
+}
+
+@await Component.InvokeAsync("Breadcrumb", new BreadcrumbViewModel { Title = "Sayfa Revizyonunu Geri Al" })
+
+<div class="card radius-15">
+    <div class="card-body">
+        <div class="card-title">
+            <h4 class="mb-0">Sayfa Revizyonu Geri Alma</h4>
+        </div>
+        <hr />
+        @if (ViewBag.AlertCode == "not-found-page")
+        {
+            <div class="alert alert-danger">
+                Böyle bir sayfa bulunamamaktadır.
+            </div>
+        }
+        else if (ViewBag.AlertCode == "not-found-revision")
+        {
+            <div class="alert alert-danger">
+                Böyle bir revizyon görüntülenemedi. Geliştiricinizle iletişim kurun.
+            </div>
+        }
+        <form class="needs-validation" method="post" novalidate>
+            <input type="hidden" asp-for="Id" />
+            <div class="form-group">
+                <label asp-for="Title">Başlık</label>
+                <input readonly class="form-control" asp-for="Title">
+            </div>
+            <div class="form-group">
+                <label asp-for="SeoTitle">SEO Başlık</label>
+                <input readonly class="form-control" asp-for="SeoTitle">
+            </div>
+            <div class="form-group">
+                <label asp-for="SeoDescription">SEO Açıklama</label>
+                <input readonly class="form-control" asp-for="SeoDescription">
+            </div>
+            @if (sitemap != null)
+            {
+                var language = _uow.Language.GetById(sitemap.LangId);
+
+                <div class="form-group">
+                    <label>Sitemap Permalink</label>
+                    <input readonly class="form-control" value="@sitemap.Permalink">
+                </div>
+                <div class="form-group">
+                    <label>Dil</label>
+                    <input readonly class="form-control" value="@language.Title">
+                </div>
+            }
+
+            @await Component.InvokeAsync("ButtonGroup", new { viewName = "Default", vm = new ButtonGroupViewModel { SubmitButtonTitle = "Geri Döndür!", ListControllerName = ViewContext.RouteData.Values["controller"].ToString() } })
+        </form>
+    </div>
+</div>
+

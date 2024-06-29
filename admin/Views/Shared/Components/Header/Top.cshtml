@@ -1,0 +1,85 @@
+﻿@model AdminHeaderViewModel
+@inject IUnitOfWork _uow
+
+<header class="top-header">
+    <nav class="navbar navbar-expand">
+        <div class="left-topbar d-flex align-items-center">
+            <a href="javascript:;" class="toggle-btn">
+                <i class="bx bx-menu"></i>
+            </a>
+        </div>
+        <div class="flex-grow-1 search-bar">
+            <div class="input-group">
+                <div class="input-group-prepend search-arrow-back">
+                    <button class="btn btn-search-back" type="button">
+                        <i class="bx bx-arrow-back"></i>
+                    </button>
+                </div>
+                @*<input type="text" class="form-control" placeholder="Arama yapın." />
+                    <div class="input-group-append">
+                        <button class="btn btn-search" type="button">
+                            <i class="lni lni-search-alt"></i>
+                        </button>
+                    </div>*@
+            </div>
+        </div>
+        <div class="right-topbar ml-auto">
+            <ul class="navbar-nav">
+                <li class="nav-item search-btn-mobile">
+                    <a class="nav-link position-relative" href="javascript:;">
+                        <i class="bx bx-search vertical-align-middle"></i>
+                    </a>
+                </li>
+
+                <li class="nav-item dropdown dropdown-user-profile">
+                    @if (Model.Admin != null)
+                    {
+                        <a class="nav-link dropdown-toggle dropdown-toggle-nocaret" href="javascript:;" data-toggle="dropdown">
+                            <div class="media user-box align-items-center">
+                                <div class="media-body user-info">
+                                    <p class="user-name mb-0">@Model.Admin.Name @Model.Admin.LastName</p>
+                                    <p class="designattion mb-0">@Model.Admin.Email</p>
+                                </div>
+                                <img src="@_uow.Admin.GetDefaultProfileAvatarSrcByAdmin(_uow, Model.Admin.ImageMediaId)" class="user-img" alt="user avatar">
+                            </div>
+                        </a>
+                    }
+                    <div class="dropdown-menu dropdown-menu-right">
+                        <a class="dropdown-item" asp-controller="admin" asp-action="profile">
+                            <i class="bx bx-user"></i><span>Profilim</span>
+                        </a>
+                        <div class="dropdown-divider mb-0"></div> <a class="dropdown-item" asp-controller="home" asp-action="logout">
+                            <i class="bx bx-power-off"></i><span>Çıkış yap</span>
+                        </a>
+                    </div>
+                </li>
+                @{
+                    Language activeLang = _uow.Language.GetById(_uow.Cookie.GetAdminLangId);
+                }
+                @if (Model.Languages.Count() > 1 && activeLang != null)
+                {
+                    <li class="nav-item dropdown dropdown-language">
+                        <a class="nav-link dropdown-toggle dropdown-toggle-nocaret" href="javascript:;" data-toggle="dropdown">
+                            <div class="lang d-flex">
+                                <div>
+                                    <i class="flag-icon flag-icon-@activeLang.ShortTitle"></i> <span>@activeLang.Title</span>
+                                </div>
+                            </div>
+                        </a>
+
+                        <div class="dropdown-menu dropdown-menu-right">
+                            @foreach (var item in Model.Languages)
+                            {
+                                <a class="dropdown-item language_dropdown_item" data-id="@item.Id" href="javascript:;">
+                                    <i class="flag-icon flag-icon-@item.ShortTitle"></i><span>@item.Title</span>
+                                </a>
+                            }
+                        </div>
+                    </li>
+                }
+                @{
+                }
+            </ul>
+        </div>
+    </nav>
+</header>
