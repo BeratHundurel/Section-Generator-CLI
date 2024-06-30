@@ -11,7 +11,20 @@
     <Company>Webbilir</Company>
     <PackAsTool>True</PackAsTool>
     <ToolCommandName>section</ToolCommandName>
+    <StartupObject>Program</StartupObject>
   </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="adminRegisterContent.txt" />
+    <None Remove="adminSectionContent.txt" />
+    <None Remove="clientSectionContent.txt" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="adminRegisterContent.txt" />
+    <EmbeddedResource Include="adminSectionContent.txt" />
+    <EmbeddedResource Include="clientSectionContent.txt" />
+  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="CommandLineParser" Version="2.9.1" />

@@ -1,13 +1,14 @@
 ﻿using CommandLine;
 using System;
-using System.Diagnostics;
 using System.IO;
+using System.Reflection;
 
 public class Program
 {
     public static readonly string adminSectionsPath = Path.Combine(Directory.GetCurrentDirectory(), "admin", "Views", "Shared", "Components", "Section");
     public static readonly string adminSectionRegisterPath = Path.Combine(Directory.GetCurrentDirectory(), "admin", "Views", "Shared", "Components", "PageSections", "Default.cshtml");
     public static readonly string clientSectionsPath = Path.Combine(Directory.GetCurrentDirectory(), "www", "Views", "Shared", "Components");
+
     public class Options
     {
         [Value(0, MetaName = "name", Required = true, HelpText = "The section name to create")]
@@ -32,18 +33,8 @@ public class Program
     {
         try
         {
-            string clientSectionContent = $@"
-            @model SectionViewModel
-            @inject IUnitOfWork _uow
-            @{{
-            }}
-            <div class=""container"">
-            <div class=""row justify-center align-items-center"">
-                <div class=""col-12"">
-                    <h1>{name}</h1>
-                </div>
-            </div>
-            ";
+            string clientSectionContent = ReadEmbeddedResource("CLI.clientSectionContent.txt");
+            clientSectionContent = clientSectionContent.Replace("{name}", name);
             File.WriteAllText(Path.Combine(clientSectionsPath, sectionNameWithExtension), clientSectionContent);
             Console.WriteLine("Client section created successfully");
         }
@@ -57,20 +48,14 @@ public class Program
     {
         try
         {
-            string adminSectionRegisterContent = $@"
-            <div class=""row"">
-                <div class=""col-sm-12 col-md-12"">
-                    <a data-url='@Url.Action(""sectionManager"", ""page"", new {{ sectionName = ""{sectionName}"" }})'
-                    class=""section_add__btn btn btn-block btn-outline-info"">
-                        {name} Section
-                    </a>
-                </div>
-            </div>
-            <br />
-            ";
+            string adminSectionRegisterContent = ReadEmbeddedResource("CLI.adminRegisterContent.txt");
+            adminSectionRegisterContent = adminSectionRegisterContent.Replace("{name}", name);
+            adminSectionRegisterContent = adminSectionRegisterContent.Replace("{sectionName}", sectionName);
+
             string registerContent = File.ReadAllText(adminSectionRegisterPath);
             int registerInsertIndex = registerContent.IndexOf("}");
             registerContent = registerContent.Insert(registerInsertIndex + 1, adminSectionRegisterContent);
+
             File.WriteAllText(adminSectionRegisterPath, registerContent);
             Console.WriteLine("Admin section registered successfully");
 
@@ -82,33 +67,23 @@ public class Program
 
         try
         {
-            string adminSectionContent = $@"
-            @model SectionViewModel
-            @inject IUnitOfWork _uow
-            @{{
-                Language language;
-                if (_uow.Cookie.GetUserLanguageId != 0)
-                {{
-                    language = _uow.Language.GetById(_uow.Cookie.GetUserLanguageId);
-                }}
-                else
-                {{
-                    language = _uow.Language.GetIsRootLang();
-                }}
-            }}
-            <input type=""hidden"" name=""sectionName"" value=""{sectionName}"" />
-            <input type=""hidden"" name=""order"" value=""@Model.order"" />
-            <input type =""hidden"" name = ""langId"" value =""@language.Id"" />
-            <div class=""form-group"">
-                <label> Title </label>
-                <input type=""text"" class=""form-control"" name=""title"" value=""@Model.title"" onkeypress=""changeTitle(this);"" onblur=""changeTitle(this);"" />
-            </div>
-            ";
+            string adminSectionContent = ReadEmbeddedResource("CLI.adminSectionContent.txt");
+            adminSectionContent = adminSectionContent.Replace("{sectionName}", sectionName);
             File.WriteAllText(Path.Combine(adminSectionsPath, sectionNameWithExtension), adminSectionContent);
         }
         catch (Exception ex)
         {
             Console.WriteLine(ex.Message);
+        }
+    }
+
+    private static string ReadEmbeddedResource(string resourceName)
+    {
+        var assembly = Assembly.GetExecutingAssembly();
+        using (Stream stream = assembly.GetManifestResourceStream(resourceName))
+        using (StreamReader reader = new StreamReader(stream))
+        {
+            return reader.ReadToEnd();
         }
     }
 }

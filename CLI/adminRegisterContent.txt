@@ -1,0 +1,9 @@
+<div class="row">
+    <div class="col-sm-12 col-md-12">
+        <a data-url='@Url.Action("sectionManager", "page", new { sectionName = "{sectionName}" })'
+           class="section_add__btn btn btn-block btn-outline-info">
+            {name} Section
+        </a>
+    </div>
+</div>
+<br />
