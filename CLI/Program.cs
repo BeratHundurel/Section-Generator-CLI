@@ -6,9 +6,9 @@ using System.Reflection;
 
 public class Program
 {
-    public static readonly string adminSectionsPath = Path.Combine(Directory.GetCurrentDirectory(), "..", "admin", "Views", "Shared", "Components", "Section");
-    public static readonly string adminSectionRegisterPath = Path.Combine(Directory.GetCurrentDirectory(), "..", "admin", "Views", "Shared", "Components", "PageSections", "Default.cshtml");
-    public static readonly string clientSectionsPath = Path.Combine(Directory.GetCurrentDirectory(), "..", "www", "Views", "Shared", "Components");
+    public static readonly string adminSectionsPath = Path.Combine(Directory.GetCurrentDirectory(), "admin", "Views", "Shared", "Components", "Section");
+    public static readonly string adminSectionRegisterPath = Path.Combine(Directory.GetCurrentDirectory(), "admin", "Views", "Shared", "Components", "PageSections", "Default.cshtml");
+    public static readonly string clientSectionsPath = Path.Combine(Directory.GetCurrentDirectory(), "www", "Views", "Shared", "Components");
 
     public class Options
     {
