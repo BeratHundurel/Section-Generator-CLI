@@ -1,0 +1,19 @@
+<div class="col-12">
+    @await Component.InvokeAsync("FileUploadModal",
+            new AdminFileUploadViewModel
+    {
+        FileUploadEntity = new FileUploadEntity
+        {
+            FileAccept = "image/jpg, image/png, image/jpeg",
+            Label = "Fotoðraf",
+            FileId = 1,
+            FileType = "image",
+            MediaId = Model.paramMediaId1.ToString()
+        },
+        AdminFileUploadModal = new AdminFileUploadModal
+        {
+            ModalTitle = "Image",
+        }
+    })
+</div>
+<br />

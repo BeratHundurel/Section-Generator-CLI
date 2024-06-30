@@ -1,0 +1,4 @@
+<div class="form-group">
+    <label>Title 1</label>
+    <input type="text" class="form-control" name="paramText1" value="@Model.paramText1" />
+</div>
