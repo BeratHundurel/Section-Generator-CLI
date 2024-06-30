@@ -26,8 +26,6 @@ public class Program
         string sectionName = $@"_{name}Section";
         GenerateAdminTemplates(name, sectionNameWithExtension, sectionName);
         GenerateClientTemplates(name, sectionNameWithExtension);
-        FormatProject(Path.Combine(Directory.GetCurrentDirectory(), "admin"));
-        FormatProject(Path.Combine(Directory.GetCurrentDirectory(), "www"));
     }
 
     private static void GenerateClientTemplates(string name, string sectionNameWithExtension)
@@ -113,29 +111,4 @@ public class Program
             Console.WriteLine(ex.Message);
         }
     }
-    private static void FormatProject(string projectPath)
-    {
-        ProcessStartInfo startInfo = new ProcessStartInfo
-        {
-            FileName = "dotnet",
-            Arguments = "format",
-            RedirectStandardOutput = true,
-            RedirectStandardError = true,
-            UseShellExecute = false,
-            CreateNoWindow = true,
-            WorkingDirectory = projectPath
-        };
-
-        using (Process process = new Process { StartInfo = startInfo })
-        {
-            process.Start();
-            process.WaitForExit();
-
-            string output = process.StandardOutput.ReadToEnd();
-            string error = process.StandardError.ReadToEnd();
-
-            Console.WriteLine(output);
-        }
-    }
-
 }
