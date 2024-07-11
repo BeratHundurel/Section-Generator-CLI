@@ -1,6 +1,7 @@
 # Section Generator CLI
 
 ![Nuget](https://img.shields.io/nuget/v/SectionGeneratorWebbilir)
+[Package Page](https://www.nuget.org/packages/SectionGeneratorWebbilir/)
 
 ## Overview
 
