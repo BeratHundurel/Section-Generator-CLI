@@ -1,19 +1,11 @@
 @model SectionViewModel
 @inject IUnitOfWork _uow
 @{
-    Language language;
-    if (Helpers.GetUserLanguageId != 0)
-    {
-        language = _uow.Language.GetById(Helpers.GetUserLanguageId);
-    }
-    else
-    {
-        language = _uow.Language.GetIsRootLang();
-    }
+    int langId = Helpers.GetUserLanguageId;
 }
-<input type="hidden" name="sectionName" value="{sectionName}" />
+<input type="hidden" name="sectionName" value="_AboutSection" />
 <input type="hidden" name="order" value="@Model.order" />
-<input type="hidden" name="langId" value="@language.Id" />
+<input type="hidden" name="langId" value="@langId" />
 <div class="form-group">
     <label> Title </label>
     <input type="text" class="form-control" name="title" value="@Model.title" onkeypress="changeTitle(this);" onblur="changeTitle(this);" />
