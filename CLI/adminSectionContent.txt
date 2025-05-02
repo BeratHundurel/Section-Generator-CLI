@@ -2,9 +2,9 @@
 @inject IUnitOfWork _uow
 @{
     Language language;
-    if (_uow.Cookie.GetUserLanguageId != 0)
+    if (Helpers.GetUserLanguageId != 0)
     {
-        language = _uow.Language.GetById(_uow.Cookie.GetUserLanguageId);
+        language = _uow.Language.GetById(Helpers.GetUserLanguageId);
     }
     else
     {
