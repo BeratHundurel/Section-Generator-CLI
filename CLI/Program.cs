@@ -63,6 +63,8 @@ public class Program
             adminSectionRegisterContent = adminSectionRegisterContent.Replace("{name}", name);
             adminSectionRegisterContent = adminSectionRegisterContent.Replace("{sectionName}", sectionName);
 
+            var test = "berat".ToString();
+
             string registerContent = File.ReadAllText(adminSectionRegisterPath);
             int registerInsertIndex = registerContent.IndexOf("}");
             registerContent = registerContent.Insert(registerInsertIndex + 1, adminSectionRegisterContent);
