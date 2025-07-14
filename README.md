@@ -13,7 +13,7 @@ Section Generator CLI is a command-line tool developed for internal use at Webbi
 You can install the Section Generator CLI via NuGet:
 
 ```bash
-dotnet tool install --global SectionGeneratorWebbilir --version 2.0.1
+dotnet tool install --global SectionGeneratorWebbilir --version 2.0.3
 ```
 
 ## Usage
