@@ -1,16 +1,8 @@
-@model SectionViewModel
+﻿@model SectionViewModel
 @inject IUnitOfWork _uow
 @{
-    Language language;
-    int langId = Helpers.GetUserLanguageId;
-    if (langId != 0)
-    {
-        language = _uow.Language.GetById(langId);
-    }
-    else
-    {
-        language = _uow.Language.GetIsRootLang();
-    }
+    int langId = Helpers.GetAdminLangId;
+    Language language = langId != 0 ? await _uow.Language.GetByIdAsync(langId) : await _uow.Language.GetRootLangAsync();
 }
 <input type="hidden" name="sectionName" value="{sectionName}" />
 <input type="hidden" name="order" value="@Model.order" />

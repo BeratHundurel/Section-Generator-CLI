@@ -1,14 +1,35 @@
-﻿using CommandLine;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
+using CommandLine;
 
 public class Program
 {
-    public static readonly string adminSectionsPath = Path.Combine(Directory.GetCurrentDirectory(), "admin", "Views", "Shared", "Components", "Section");
-    public static readonly string adminSectionRegisterPath = Path.Combine(Directory.GetCurrentDirectory(), "admin", "Views", "Shared", "Components", "PageSections", "Default.cshtml");
-    public static readonly string clientSectionsPath = Path.Combine(Directory.GetCurrentDirectory(), "www", "Views", "Shared", "Components");
+    public static readonly string adminSectionsPath = Path.Combine(
+        Directory.GetCurrentDirectory(),
+        "admin",
+        "Views",
+        "Shared",
+        "Components",
+        "Section"
+    );
+    public static readonly string adminSectionRegisterPath = Path.Combine(
+        Directory.GetCurrentDirectory(),
+        "admin",
+        "Views",
+        "Shared",
+        "Components",
+        "PageSections",
+        "Default.cshtml"
+    );
+    public static readonly string clientSectionsPath = Path.Combine(
+        Directory.GetCurrentDirectory(),
+        "www",
+        "Views",
+        "Shared",
+        "Components"
+    );
 
     public class Options
     {
@@ -27,9 +48,10 @@ public class Program
 
     public static void Main(string[] args)
     {
-        Parser.Default.ParseArguments<Options>(args)
-                 .WithParsed<Options>(opts => ExecuteCommand(opts.Name, opts.Paragraphs, opts.Images, opts.Textareas))
-                 .WithNotParsed<Options>((errs) => HandleParseError(errs));
+        Parser
+            .Default.ParseArguments<Options>(args)
+            .WithParsed<Options>(opts => ExecuteCommand(opts.Name, opts.Paragraphs, opts.Images, opts.Textareas))
+            .WithNotParsed<Options>((errs) => HandleParseError(errs));
     }
 
     private static void ExecuteCommand(string name, int paragraphs, int images, int textareas)
@@ -55,7 +77,14 @@ public class Program
         }
     }
 
-    private static void GenerateAdminTemplates(string name, string sectionNameWithExtension, string sectionName, int paragraphs, int images, int textareass)
+    private static void GenerateAdminTemplates(
+        string name,
+        string sectionNameWithExtension,
+        string sectionName,
+        int paragraphs,
+        int images,
+        int textareass
+    )
     {
         try
         {
@@ -71,7 +100,6 @@ public class Program
 
             File.WriteAllText(adminSectionRegisterPath, registerContent);
             Console.WriteLine("Admin section registered successfully");
-
         }
         catch (Exception ex)
         {
